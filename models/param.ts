@@ -11,6 +11,7 @@ export interface Params {
 export interface Param {
     title: string,
     key: string,
+    currentValue?: number,
     minValue?: number,
     maxValue?: number
 }

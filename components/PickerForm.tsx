@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, ColorValue, processColor, StyleSheet } from "react-native";
 import { app, forms } from "../styles/generic";
 import { Picker } from "@react-native-picker/picker";
@@ -7,7 +7,9 @@ import { Color } from "react-native-svg";
 import RNPickerSelect, { PickerStyle } from "react-native-picker-select";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Param } from "../models/param";
-import { handleData } from "../utils/dataAccess";
+import { APIError, handleData } from "../utils/dataAccess";
+import { pickerSelectStyles } from "../styles/components/picker";
+import { lastSettings } from "../utils/db";
 
 export const PickerForm = function ({type, items, style} : {type: Param, items: any, style?: any}) {
   
@@ -20,18 +22,23 @@ export const PickerForm = function ({type, items, style} : {type: Param, items: 
     color: "#9EA0A4",
   };
 
-  const [selectedAnimation, setSelectedAnimation] = useState();
+  const [selectedAnimation, setSelectedAnimation] = useState<any>();
 
   const checkUpdate = (jsonObject: any) => {
 
   }
-  
 
-  const updateParam = (value: any) => {
-      handleData(`http://192.168.0.99/setparam?key=${type.key}&value=${value}`, checkUpdate)
+
+
+  const updateParam = (val: any) => {
+
+      type.currentValue = val;
+
+      lastSettings.upsert(type)
+
+      handleData(`http://192.168.0.99/setparam?key=${type.key}&value=${val}`, checkUpdate, APIError)
       
   }
-  
 
   return (
     <View style={[app.row, style]}>
@@ -41,8 +48,13 @@ export const PickerForm = function ({type, items, style} : {type: Param, items: 
           placeholder={placeholder}
           items={items}
           onValueChange={(value) => {
-            setSelectedAnimation(value);
-            updateParam(value);
+            
+            if (value) {
+              setSelectedAnimation(value)
+              updateParam(value)
+            } 
+            
+            
           }}
           style={{
             ...pickerSelectStyles,
@@ -64,25 +76,4 @@ export const PickerForm = function ({type, items, style} : {type: Param, items: 
   );
 };
 
-const pickerSelectStyles = StyleSheet.create({
-  inputIOS: {
-    fontSize: 16,
-    paddingVertical: 12,
-    paddingHorizontal: 10,
-    borderWidth: 1,
-    borderColor: "gray",
-    borderRadius: 4,
-    color: "black",
-    paddingRight: 30, // to ensure the text is never behind the icon
-  },
-  inputAndroid: {
-    fontSize: 16,
-    paddingHorizontal: 10,
-    paddingVertical: 2,
-    borderWidth: 0.5,
-    borderColor: theme.dark,
-    borderRadius: 8,
-    color: "white",
-    paddingRight: 30, // to ensure the text is never behind the icon
-  },
-});
+

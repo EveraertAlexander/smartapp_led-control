@@ -52,3 +52,7 @@ export const handleData = (
         });
   };
   
+  export const APIError = (error: any) => {
+    console.log(error);
+    
+}

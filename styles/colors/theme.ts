@@ -40,6 +40,7 @@ export const background = {
     },
 
     states: {
-        green: '#14CB00'
+        green: '#14CB00',
+        red: '#c91414'
     }
 }
