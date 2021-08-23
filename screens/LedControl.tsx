@@ -26,7 +26,7 @@ import { validateIp } from "../utils/validation";
 
 const Tab = createBottomTabNavigator();
 
-function LedControl(props: any) {
+function LedControl({previousConnections, updatePreviousConnections}: {previousConnections?: string, updatePreviousConnections?: any}) {
   const [config, setConfig] = useState<LedConfig[]>();
   const [lastSettings, setLastSettings] = useState();
 
@@ -51,16 +51,6 @@ function LedControl(props: any) {
     },
   });
 
-  const getLedConfig = async () => {
-    const { rows }: { rows: SQLResultSetRowList } = await ledConfig.read.all();
-    setConfig((rows as any)._array);
-  };
-
-  useEffect(() => {
-    initLedConfig();
-    initLastSettings();
-    getLedConfig();
-  }, []);
 
 
   // if (!validateIp(props.ipAddress)) {
@@ -68,7 +58,6 @@ function LedControl(props: any) {
   // } else {
     return (
       <SafeAreaProvider>
-        <NavigationContainer>
           <Tab.Navigator
             screenOptions={customTabOptions}
             tabBarOptions={{
@@ -90,7 +79,6 @@ function LedControl(props: any) {
             <Tab.Screen name="Themes" component={Themes} />
             <Tab.Screen name="Settings" component={Settings} />
           </Tab.Navigator>
-        </NavigationContainer>
       </SafeAreaProvider>
     );
   }
@@ -99,6 +87,7 @@ function LedControl(props: any) {
 const mapStateToProps = (state: any) => {
   return {
     ipAddress: state.ipAddress,
+    previousConnections: state.previousConnections
   };
 };
 
@@ -106,10 +95,12 @@ const mapDispatchToProps = (dispatch: any) => {
   return {
     updateIpAddress: (addr: string) =>
       dispatch({ type: "UPDATE_IPADDRESS", payload: addr }),
+    updatePreviousConnections : (config: LedConfig[]) =>
+      dispatch({type: "UPDATE_PREVIOUSCONNECTIONS", payload: config})
   };
 };
 
-export default connect(mapStateToProps)(LedControl);
+export default connect(mapStateToProps, mapDispatchToProps)(LedControl);
 
 const styles = StyleSheet.create({
   container: {

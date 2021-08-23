@@ -12,18 +12,26 @@ import { background } from "../styles/colors/theme";
 import { configForm } from "../styles/components/configForm";
 import { header } from "../styles/components/header";
 import { ledConfig } from "../utils/db";
-import { SQLResultSet, SQLResultSetRowList } from "expo-sqlite";
 import RNPickerSelect, { PickerStyle } from "react-native-picker-select";
 import { pickerSelectStyles } from "../styles/components/picker";
 import { MaterialIcons } from "@expo/vector-icons";
 import { connect } from "react-redux";
 import { validateIp, validateName } from "../utils/validation";
 
-const ConnectPage = (props: any) => {
-  const [loaded, setLoaded] = useState(false);
+const ConnectPage = ({
+  navigation,
+  previousConnections,
+  updateIpAddress,
+  updatePreviousConnections,
+}: {
+  navigation: any;
+  previousConnections: LedConfig[];
+  updateIpAddress: Function;
+  updatePreviousConnections: Function;
+}) => {
+
   const [pickerItems, setPickerItems] = useState<any>([]);
   const [selected, setSelected] = useState<any>();
-  const [config, setConfig] = useState<LedConfig[]>([]);
   const [currentConfig, setCurrentConfig] = useState<LedConfig>({
     name: "",
     ipAddress: "",
@@ -35,52 +43,58 @@ const ConnectPage = (props: any) => {
     color: "#9EA0A4",
   };
 
-  const handleConnectPress = async (e: any) => {
+  const handleConnectPress = async () => {
     if (
       validateIp(currentConfig.ipAddress) &&
       validateName(currentConfig.name)
     ) {
-      if (!currentConfig.id) {
-        const insert = await ledConfig.create(currentConfig);
 
-        console.log(insert);
-      } else {
-        const update = await ledConfig.update(currentConfig);
-
-        console.log(update);
-      }
-
-      props.updateIpAddress(currentConfig.ipAddress);
-
-      props.navigation.navigate('Overview');
+      updateIpAddress(currentConfig.ipAddress);
+      navigation.navigate("Main");
     } else if (!validateIp(currentConfig.ipAddress)) {
       alert("You have entered an invalid IP address!");
     }
-
   };
 
-  const handlePickerChange = (value: any) => {
-    setSelected(value);
+  const handlePickerChange = (e: any) => {
+    console.log(e);
 
-    for (const configItem of config) {
-      if (configItem.id == value) {
-        setCurrentConfig(configItem);
-        break;
-      }
-    }
-  };
+    setSelected(e);
 
-  const getConfig = async () => {
-    const { rows }: { rows: SQLResultSetRowList } = await ledConfig.read.all();
-    if (!loaded) {
-      setConfig((rows as any)._array);
+    if (e != null) {
+      previousConnections.map((c) => {
+        if (c && c.id == e) {
+          setCurrentConfig({ id: c.id, name: c.name, ipAddress: c.ipAddress });
+        }
+      });
+    } else {
+      setCurrentConfig({ id: undefined, name: "", ipAddress: "" });
     }
   };
 
   useEffect(() => {
-    getConfig();
-    setLoaded(true);
-  }, []);
+    if (previousConnections) {
+      const _items = previousConnections
+        .filter((c: any) => {
+          if (c) {
+            return true;
+          }
+          return false;
+        })
+        .map((c) => {
+          return { label: c.name, value: c.id };
+        });
+
+      if (_items) {
+        setPickerItems(_items);
+      } else {
+        setPickerItems([]);
+      }
+    }
+
+    setCurrentConfig({ id: undefined, name: "", ipAddress: "" });
+    setSelected(null)
+  }, [previousConnections]);
 
   return (
     <SafeAreaView
@@ -97,9 +111,7 @@ const ConnectPage = (props: any) => {
         <View style={{ width: "50%" }}>
           <RNPickerSelect
             placeholder={placeholder}
-            items={config.map((c) => {
-              return { label: c.name, value: c.id };
-            })}
+            items={pickerItems}
             onValueChange={handlePickerChange}
             style={{
               ...pickerSelectStyles,
@@ -161,6 +173,7 @@ const ConnectPage = (props: any) => {
 const mapStateToProps = (state: any) => {
   return {
     ipAddress: state.ipAddress,
+    previousConnections: state.previousConnections,
   };
 };
 
@@ -168,6 +181,8 @@ const mapDispatchToProps = (dispatch: any) => {
   return {
     updateIpAddress: (addr: string) =>
       dispatch({ type: "UPDATE_IPADDRESS", payload: addr }),
+    updatePreviousConnections: (config: LedConfig[]) =>
+      dispatch({ type: "UPDATE_PREVIOUSCONNECTIONS", payload: config }),
   };
 };
 

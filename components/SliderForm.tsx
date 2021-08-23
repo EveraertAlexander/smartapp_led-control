@@ -14,18 +14,18 @@ const SliderForm = function ({
   style,
   iconName,
   updateConnectionState,
-  connected
+  connected,
+  ipAddress
 }: {
   type: Param;
   style?: any;
   iconName: any;
   updateConnectionState?: any;
-  connected?: boolean
+  connected?: boolean,
+  ipAddress?: string
 }) {
   const showResult = (e: any) => {
-    if(!connected){
-        updateConnectionState(true)
-    }
+    updateConnectionState(true)
   };
 
   const handleValueChange = async (e: number) => {
@@ -36,16 +36,17 @@ const SliderForm = function ({
     let val: number = e;
 
     if (type.key == "master_color_temp") val = Math.round(e);
-
+    
     handleData(
-      `http://192.168.0.99/setparam?key=${type.key}&value=${val}`,
+      `http://${ipAddress}/setparam?key=${type.key}&value=${val}`,
       showResult,
       () => {
-        updateConnectionState(false)
-        alert("Oops! Could not connect to the strip");
+        updateConnectionState(false);
+        // alert("Oops! Could not connect to the strip");
       }
     );
   };
+
 
   return (
     <View style={style}>

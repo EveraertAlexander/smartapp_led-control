@@ -1,10 +1,27 @@
-import React from 'react';
-import { Text } from 'react-native'
+import { createStackNavigator } from "@react-navigation/stack";
+import React from "react";
+import { Text } from "react-native";
+import { theme } from "../../styles/colors/theme";
+import AddConnection from "./AddConnection";
+import EditConnection from "./EditConnection";
+import SettingsHome from "./SettingsHome";
+
+const Stack = createStackNavigator();
 
 const Settings = function ({ navigation }: any) {
-    return (
-        <Text>Settings</Text>
-    )
-}
+  return (
+    <Stack.Navigator
+    headerMode='screen'
+      screenOptions={{
+        headerTintColor: "white",
+        headerStyle: { backgroundColor: theme.neutral },
+      }}
+    >
+      <Stack.Screen name="Settings" component={SettingsHome} />
+      <Stack.Screen name="Edit Connection" component={EditConnection} />
+      <Stack.Screen name="Add Connection" component={AddConnection} />
+    </Stack.Navigator>
+  );
+};
 
 export default Settings;

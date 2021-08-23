@@ -1,5 +1,5 @@
 export interface LedConfig {
-    id?: string,
+    id?: number,
     name: string,
     ipAddress: string
 }

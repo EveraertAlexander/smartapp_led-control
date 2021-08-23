@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, ScrollView, Alert } from "react-native";
+import { Text, View, ScrollView, Alert, RefreshControl } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ConnectionStatus } from "../../components/connectionStatus";
 import { Header } from "../../components/Header";
@@ -15,9 +15,15 @@ import { initLedConfig, lastSettings } from "../../utils/db";
 import { connect } from "react-redux";
 import { SQLResultSet, SQLResultSetRowList } from "expo-sqlite";
 
-const Overview = function ({ navigation, ipAddress, connected, updateConnectionState }: any) {
+const Overview = function ({
+  navigation,
+  ipAddress,
+  connected,
+  updateConnectionState,
+}: any) {
   const [patternLabels, setPatternLabels] = useState<PickerItem[]>([]);
   const [paletteLabels, setPaletteLabels] = useState<PickerItem[]>([]);
+  const [refreshing, setRefreshing] = useState<boolean>(false);
   // const [connected, setConnected] = useState(false);
 
   const createTwoButtonAlert = () =>
@@ -37,12 +43,14 @@ const Overview = function ({ navigation, ipAddress, connected, updateConnectionS
 
   const storePatterns = (jsonObject: any) => {
     let _patterns: PickerItem[] = [];
-    updateConnectionState(true)
+    updateConnectionState(true);
+
     if (jsonObject.names) {
       for (var key of Object.keys(jsonObject.names as Object)) {
-        _patterns.push({ label: jsonObject.names[key], value: key });
+        _patterns.push({ label: jsonObject.names[key], value: key, key: key });
       }
     }
+
     setPatternLabels(_patterns);
   };
 
@@ -59,7 +67,8 @@ const Overview = function ({ navigation, ipAddress, connected, updateConnectionS
   };
 
   const notConnected = () => {
-    updateConnectionState(false)
+    updateConnectionState(false);
+    setRefreshing(false);
     createTwoButtonAlert();
   };
 
@@ -85,18 +94,18 @@ const Overview = function ({ navigation, ipAddress, connected, updateConnectionS
 
     res.map((r: any) => {
       Object.keys(params).map((k) => {
-        if(r.id == params[k as keyof typeof params].key){
+        if (r.id == params[k as keyof typeof params].key) {
           params[k as keyof typeof params].currentValue = r.value;
         }
       });
     });
 
-    console.log('NIEUWE PARAMS MATTIE', params);
-    
+    console.log("NIEUWE PARAMS MATTIE", params);
   };
 
   const connectionSuccessful = (obj: any) => {
-    updateConnectionState(true)
+    updateConnectionState(true);
+    setRefreshing(false);
     getLastSettings();
     getPatterns();
     getPalettes();
@@ -110,15 +119,21 @@ const Overview = function ({ navigation, ipAddress, connected, updateConnectionS
     );
   };
 
-  useEffect(() => {
-    console.log("HET IP ADRES MATJE", ipAddress);
+  const onRefresh = () => {
+    setRefreshing(true);
 
     tryConnection();
-  }, []);
+  }
+  
+
+  useEffect(() => {
+    console.log("HET IP ADRES MATJE", ipAddress);
+    updateConnectionState(false);
+    tryConnection();
+  }, [ipAddress]);
 
   return (
-    <SafeAreaView style={[background.neutral[1000], { flex: 1 }]}>
-      <ScrollView>
+      <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />} style={[background.neutral[1000], { flex: 1 }]}>
         <View style={app.section}>
           <Header />
           <ConnectionStatus connected={connected} ipAddress={ipAddress} />
@@ -155,14 +170,14 @@ const Overview = function ({ navigation, ipAddress, connected, updateConnectionS
           <SliderForm type={params.masterSaturation} iconName="invert-colors" />
         </View>
       </ScrollView>
-    </SafeAreaView>
+  
   );
 };
 
 const mapStateToProps = (state: any) => {
   return {
     ipAddress: state.ipAddress,
-    connected: state.connected
+    connected: state.connected,
   };
 };
 

@@ -11,50 +11,54 @@ import { APIError, handleData } from "../utils/dataAccess";
 import { pickerSelectStyles } from "../styles/components/picker";
 import { lastSettings } from "../utils/db";
 
-export const PickerForm = function ({type, items, style} : {type: Param, items: any, style?: any}) {
-  
-
-
-
+export const PickerForm = function ({
+  type,
+  items,
+  style,
+}: {
+  type: Param;
+  items: any;
+  style?: any;
+}) {
   const placeholder = {
     label: `Select ${type.title}`,
     value: null,
     color: "#9EA0A4",
   };
 
-  const [selectedAnimation, setSelectedAnimation] = useState<any>();
+  const [selectedAnimation, setSelectedAnimation] = useState<any>({key: 0});
 
-  const checkUpdate = (jsonObject: any) => {
-
-  }
-
-
+  const checkUpdate = (jsonObject: any) => {};
 
   const updateParam = (val: any) => {
+    type.currentValue = val;
 
-      type.currentValue = val;
+    lastSettings.upsert(type);
 
-      lastSettings.upsert(type)
+    handleData(
+      `http://192.168.0.99/setparam?key=${type.key}&value=${val}`,
+      checkUpdate,
+      APIError
+    );
+  };
 
-      handleData(`http://192.168.0.99/setparam?key=${type.key}&value=${val}`, checkUpdate, APIError)
-      
-  }
+  useEffect(() => {
+    console.log("items", items);
+  }, []);
 
   return (
     <View style={[app.row, style]}>
       <Text style={forms.title}>{type.title}</Text>
       <View style={{ width: "50%" }}>
         <RNPickerSelect
+          fixAndroidTouchableBug={true}
           placeholder={placeholder}
           items={items}
-          onValueChange={(value) => {
-            
+          onValueChange={(value, index) => {
             if (value) {
-              setSelectedAnimation(value)
-              updateParam(value)
-            } 
-            
-            
+              setSelectedAnimation(value);
+              updateParam(value);
+            }
           }}
           style={{
             ...pickerSelectStyles,
@@ -75,5 +79,3 @@ export const PickerForm = function ({type, items, style} : {type: Param, items: 
     </View>
   );
 };
-
-

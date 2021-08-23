@@ -21,6 +21,7 @@ export const configForm = StyleSheet.create({
     },
     label: {
         fontSize: 16,
+        marginBottom: 4,
         color: '#FFF'
     },
 

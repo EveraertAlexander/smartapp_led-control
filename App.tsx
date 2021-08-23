@@ -5,10 +5,12 @@ import { createStore } from "redux";
 import { Provider } from "react-redux";
 import LedControl from "./screens/LedControl";
 import { useFonts } from "expo-font";
+import Index from "./screens";
 
 const initialState = {
   ipAddress: null,
-  connected: false
+  connected: false,
+  previousConnections : null,
 };
 
 const reducer = (state: any = initialState, action: any) => {
@@ -16,8 +18,11 @@ const reducer = (state: any = initialState, action: any) => {
     case "UPDATE_IPADDRESS":
       return {...state, ipAddress: action.payload}
     case "UPDATE_CONNECTIONSTATE":
-      
       return {...state, connected: action.payload}
+    case "UPDATE_PREVIOUSCONNECTIONS":
+      console.log("YO IK WORD GEUPDATE KEREL", action.payload);
+      
+      return {...state, previousConnections: action.payload}
   }
   return state;
 };
@@ -34,7 +39,7 @@ export default function App() {
   if (fontsLoaded) {
     return (
       <Provider store={store}>
-        <LedControl />
+        <Index />
       </Provider>
     );
   } else {
