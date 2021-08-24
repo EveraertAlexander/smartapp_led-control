@@ -2,6 +2,12 @@ import { StyleSheet } from 'react-native';
 import { theme } from '../colors/theme';
 
 export const pickerSelectStyles = StyleSheet.create({
+    container: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: 30
+    },
     inputIOS: {
       fontSize: 16,
       paddingVertical: 12,

@@ -3,18 +3,19 @@ import { Text, View, ScrollView, Alert, RefreshControl } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ConnectionStatus } from "../../components/connectionStatus";
 import { Header } from "../../components/Header";
-import  PickerForm  from "../../components/PickerForm";
+import PickerForm from "../../components/PickerForm";
 import SliderForm from "../../components/SliderForm";
 import { PickerItem } from "../../models/pattern";
 import { background } from "../../styles/colors/theme";
 import { header } from "../../styles/components/header";
-import { app } from "../../styles/generic";
+import { app, page } from "../../styles/generic";
 import { APIError, handleData } from "../../utils/dataAccess";
 import { params } from "../../data/params";
 import { initLedConfig, lastSettings } from "../../utils/db";
 import { connect } from "react-redux";
 import { SQLResultSet, SQLResultSetRowList } from "expo-sqlite";
 import { Color, ColorPalette } from "../../models/palette";
+import { card } from "../../styles/components/card";
 
 const Overview = function ({
   navigation,
@@ -93,7 +94,7 @@ const Overview = function ({
   };
 
   const callbackSetPalettes = (obj: any) => {
-    updateConnectionState(true)
+    updateConnectionState(true);
   };
 
   const setPalettes = () => {
@@ -121,8 +122,9 @@ const Overview = function ({
           `http://${ipAddress}/setpalette?key=${
             theme.id
           }&value=${JSON.stringify(ObjectToSend)}`,
-          callbackSetPalettes, () => {
-            updateConnectionState(false)
+          callbackSetPalettes,
+          () => {
+            updateConnectionState(false);
           }
         );
       });
@@ -184,48 +186,46 @@ const Overview = function ({
   }, [savedThemes]);
 
   return (
-    <ScrollView
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-      }
-      style={[background.neutral[1000], { flex: 1 }]}
-    >
-      <View style={app.section}>
-        <Header />
-        <ConnectionStatus connected={connected} ipAddress={ipAddress} />
-      </View>
-      <View style={app.section}>
-        <PickerForm
-          type={params.primaryPattern}
-          items={patternLabels}
-          style={{ marginBottom: 30 }}
-        />
-        <SliderForm
-          style={{ marginBottom: 30 }}
-          type={params.primarySpeed}
-          iconName="speed"
-        />
-        <SliderForm type={params.primaryScale} iconName="fullscreen" />
-      </View>
-      <View style={app.section}>
-        <PickerForm
-          type={params.palette}
-          items={paletteLabels}
-          style={{ marginBottom: 30 }}
-        />
-        <SliderForm
-          style={{ marginBottom: 30 }}
-          type={params.masterBrightness}
-          iconName="brightness-6"
-        />
-        <SliderForm
-          style={{ marginBottom: 30 }}
-          type={params.masterColorTemp}
-          iconName="device-thermostat"
-        />
-        <SliderForm type={params.masterSaturation} iconName="invert-colors" />
-      </View>
-    </ScrollView>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        } style={[background.neutral[1000], { flex: 1 }]}
+      >
+        <View style={app.section}>
+          <Header />
+          <ConnectionStatus connected={connected} ipAddress={ipAddress} />
+        </View>
+        <View style={page.row}>
+          <View style={card.body}>
+            <Text style={card.title}>Animations</Text>
+            <PickerForm type={params.primaryPattern} items={patternLabels} />
+            <SliderForm type={params.primarySpeed} iconName="speed" />
+            <SliderForm type={params.primaryScale} iconName="fullscreen" />
+          </View>
+          <View style={card.body}>
+            <Text style={card.title}>Colors</Text>
+            <PickerForm
+              type={params.palette}
+              items={paletteLabels}
+              style={{ marginBottom: 30 }}
+            />
+            <SliderForm
+              style={{ marginBottom: 30 }}
+              type={params.masterBrightness}
+              iconName="brightness-6"
+            />
+            <SliderForm
+              style={{ marginBottom: 30 }}
+              type={params.masterColorTemp}
+              iconName="device-thermostat"
+            />
+            <SliderForm
+              type={params.masterSaturation}
+              iconName="invert-colors"
+            />
+          </View>
+        </View>
+      </ScrollView>
   );
 };
 

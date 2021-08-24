@@ -1,21 +1,25 @@
 import { StyleSheet } from 'react-native';
 
 export const neutral = {
-    100: '#FFFFFF',
-    200: '#d1d1d1',
-    300: '#bababa',
-    400: '#b5b5b5',
-    500: '#919191',
-    600: '#939393',
-    700: '#707070',
-    800: '#454545',
-    900: '#252525',
-    1000: '#000',
+    100: '#F8F5FC',
+    200: '#EAE4F2',
+    300: '#C7BED1',
+    400: '#A399B0',
+    500: '#8E839C',
+    600: '#6F637D',
+    700: '#433A4D',
+    800: '#282130',
+    900: '#140D1C',
+    1000: '#09040F',
 };
 
 export const theme = {
     dark: '#BB86FCCC',
-    neutral: '#BB86FC'
+    neutral: '#BB86FC',
+    alpha: '#7B32D9',
+    beta: '#F4649F',
+    gamma: '#24124B',
+    delta: '#F4D2E0'
 }
 
 export const background = {

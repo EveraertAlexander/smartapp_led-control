@@ -9,7 +9,8 @@ export const app = StyleSheet.create({
     section: {
         borderBottomColor: neutral[600],
         borderBottomWidth: 1,
-        paddingVertical: 30
+        paddingVertical: 30,
+        marginBottom: 16,
     },
 
     container: {
@@ -36,7 +37,13 @@ export const app = StyleSheet.create({
 export const forms = StyleSheet.create({
     title: {
         fontFamily: 'Raleway-Medium',
-        color: '#FFF',
-        fontSize: 18
+        color: neutral[300],
+        fontSize: 16
     },
+})
+
+export const page = StyleSheet.create({
+    row: {
+        marginHorizontal: 16
+    }
 })

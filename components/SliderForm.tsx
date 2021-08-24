@@ -8,6 +8,7 @@ import { APIError, handleData } from "../utils/dataAccess";
 import { Param } from "../models/param";
 import { lastSettings } from "../utils/db";
 import { connect } from "react-redux";
+import { slider } from "../styles/components/slider";
 
 const SliderForm = function ({
   type,
@@ -49,20 +50,21 @@ const SliderForm = function ({
 
 
   return (
-    <View style={style}>
-      <View style={[app.row]}>
+    <View style={{marginBottom: 30}}>
+      <View style={[slider.container]}>
         <Text style={forms.title}>{type.title}</Text>
         <MaterialIcons name={iconName} size={32} color="white" />
       </View>
       <Slider
         onValueChange={handleValueChange}
         value={type.currentValue}
-        style={{ height: 40 }}
+        style={{ marginLeft: -10, marginRight: -10 }}
         minimumValue={type.minValue ? type.minValue : 0}
         maximumValue={type.maxValue ? type.maxValue : 1}
-        minimumTrackTintColor={theme.neutral}
+        minimumTrackTintColor={theme.delta}
         maximumTrackTintColor={theme.dark}
-        thumbTintColor={theme.neutral}
+        thumbTintColor={theme.beta}
+        
       />
     </View>
   );

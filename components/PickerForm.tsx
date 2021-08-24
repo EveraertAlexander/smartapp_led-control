@@ -47,7 +47,7 @@ const PickerForm = function ({
 
 
   return (
-    <View style={[app.row, style]}>
+    <View style={[pickerSelectStyles.container, style]}>
       <Text style={forms.title}>{type.title}</Text>
       <View style={{ width: "50%" }}>
         <RNPickerSelect

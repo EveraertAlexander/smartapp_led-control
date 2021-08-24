@@ -6,7 +6,7 @@ import { app } from "../styles/generic";
 const PageLayout = (props: any) => {
   return (
     <SafeAreaView style={[background.neutral[1000], { flex: 1 }]}>
-      <ScrollView style={app.container}>{props.children}</ScrollView>
+      <ScrollView refreshControl={props.refreshControl ? props.refreshControl : null} style={app.container}>{props.children}</ScrollView>
     </SafeAreaView>
   );
 };
