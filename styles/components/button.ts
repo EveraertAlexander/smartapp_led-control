@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { background, theme } from '../colors/theme';
+import { background, neutral, theme } from '../colors/theme';
 
 export const button = StyleSheet.create({
     button: {
@@ -33,6 +33,8 @@ export const button = StyleSheet.create({
     }
 })
 
+
+
 export const floatingButton = StyleSheet.create({
     body: {
         position: 'absolute',
@@ -44,5 +46,21 @@ export const floatingButton = StyleSheet.create({
         bottom: 30,
         backgroundColor: theme.neutral,
         borderRadius: 30
+    }
+})
+
+export const deleteButton = StyleSheet.create({
+    body: {
+        padding: 8,
+        borderRadius: 16,
+        borderColor: background.states.red,
+        borderWidth: 1,
+        alignItems: 'center',
+    },
+
+    text: {
+        color: background.states.red,
+        fontSize: 16,
+        fontFamily: 'Raleway-Medium'
     }
 })

@@ -10,10 +10,10 @@ import {
 import Button from "../../components/Button";
 import PageLayout from "../../components/PageLayout";
 import { Color, ColorPalette } from "../../models/palette";
-import { background, neutral } from "../../styles/colors/theme";
+import { background, neutral, theme } from "../../styles/colors/theme";
 import { configForm } from "../../styles/components/configForm";
 import { settings } from "../../styles/components/settings";
-import { app } from "../../styles/generic";
+import { app, page } from "../../styles/generic";
 import { palettes } from "../../utils/db";
 import Svg, { Circle } from "react-native-svg";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -23,6 +23,10 @@ import nearestColor from "nearest-color";
 import { getColorName } from "../../utils/nearestColor";
 import { hsvToHex } from "../../utils/colorConversion";
 import { connect } from "react-redux";
+import { card } from "../../styles/components/card";
+import { textInput } from "../../styles/components/textInput";
+import { colorItem } from "../../styles/components/colorItem";
+import DeleteButton from "../../components/DeleteButton";
 
 const EditTheme = ({
   navigation,
@@ -153,8 +157,37 @@ const EditTheme = ({
 
   return (
     <PageLayout>
-      <Text style={[settings.header, { marginBottom: 16 }]}>Edit Theme</Text>
-      <Text style={configForm.label}>Theme Name</Text>
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: 16,
+        }}
+      >
+        <Text
+          style={{
+            fontSize: 24,
+            color: neutral[100],
+            fontFamily: "Raleway-Medium",
+          }}
+        >
+          Edit Theme
+        </Text>
+        <TouchableOpacity onPress={handleOnSave}>
+          <Text
+            style={{
+              fontFamily: "Raleway-Bold",
+              fontSize: 16,
+              color: theme.alpha,
+            }}
+          >
+            SAVE
+          </Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* <Text style={configForm.label}>Theme Name</Text>
       {editingTheme ? (
         <TextInput
           placeholderTextColor={neutral[600]}
@@ -241,7 +274,86 @@ const EditTheme = ({
         >
           SAVE
         </Button>
+      </View> */}
+
+      <View style={card.body}>
+        <Text style={card.title}>Title</Text>
+
+        {editingTheme ? (
+          <TextInput
+            placeholderTextColor={neutral[400]}
+            placeholder={"Eg Spectrum"}
+            onChangeText={handleOnChangeName}
+            style={textInput.input}
+            value={editingTheme.name}
+            selectionColor={neutral[300]}
+          />
+        ) : null}
       </View>
+      <View style={card.body}>
+        <Text style={card.title}>Colors</Text>
+        <View
+          style={{
+            borderBottomColor: neutral[300],
+            borderBottomWidth: 1,
+            marginBottom: 16,
+          }}
+        >
+          <ScrollView
+            style={{
+              maxHeight: 200,
+            }}
+          >
+            {editingTheme
+              ? editingTheme.colors.map((c: Color) => {
+                  return (
+                    <View
+                      style={colorItem.container}
+                      key={c.colorId ? c.colorId : `${c.h}${c.s}${c.v}`}
+                    >
+                      <View style={colorItem.colorInfo}>
+                        <Svg height="20" width="20">
+                          <Circle
+                            cx="10"
+                            cy="10"
+                            r="10"
+                            fill={hsvToHex(c.h, c.s, c.v)}
+                          />
+                        </Svg>
+                        <Text style={colorItem.colorText}>
+                          {getColorName(hsvToHex(c.h, c.s, c.v)).name}
+                        </Text>
+                      </View>
+
+                      <TouchableOpacity
+                        onPress={() => {
+                          handleRemoveColor(c);
+                        }}
+                      >
+                        <MaterialIcons
+                          name="delete-outline"
+                          size={24}
+                          color={background.states.red}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  );
+                })
+              : null}
+          </ScrollView>
+        </View>
+        <View style={{flexDirection: "row", justifyContent: "center"}}>
+          <TouchableOpacity onPress={handleAddColor}>
+            <MaterialIcons
+              name="add-circle-outline"
+              size={32}
+              color={theme.alpha}
+            />
+          </TouchableOpacity>
+        </View>
+      </View>
+        <DeleteButton onButtonPress={handleOnDelete}>DELETE THEME</DeleteButton>
+
     </PageLayout>
   );
 };

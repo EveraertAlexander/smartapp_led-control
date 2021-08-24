@@ -1,7 +1,7 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import React from "react";
 import { Text } from "react-native";
-import { theme } from "../../styles/colors/theme";
+import { neutral, theme } from "../../styles/colors/theme";
 import AddConnection from "./AddConnection";
 import EditConnection from "./EditConnection";
 import SettingsHome from "./SettingsHome";
@@ -14,7 +14,7 @@ const Settings = function ({ navigation }: any) {
     headerMode='screen'
       screenOptions={{
         headerTintColor: "white",
-        headerStyle: { backgroundColor: theme.neutral },
+        headerStyle: { backgroundColor: neutral[700] },
       }}
     >
       <Stack.Screen name="Settings" component={SettingsHome} />
