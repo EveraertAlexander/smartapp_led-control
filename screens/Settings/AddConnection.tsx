@@ -35,7 +35,6 @@ const AddConnection = ({
   };
 
   const handleSaveButton = async () => {
-    console.log("Save Pressed");
 
     if(validateName(connection.name) && validateIp(connection.ipAddress)){
         const insert = await ledConfig.create(connection)

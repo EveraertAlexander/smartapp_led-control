@@ -1,5 +1,6 @@
 import { openDatabase, Database, SQLTransaction, Query, SQLResultSet, SQLError } from 'expo-sqlite';
 import { LedConfig } from '../models/ledConfig';
+import { Color, ColorPalette } from '../models/palette';
 import { Param } from '../models/param';
 
 const databaseName: string = 'ledControl',
@@ -75,6 +76,193 @@ export const initLastSettings = async () => {
     }
 }
 
+export const initPalettes = async () => {
+
+    const db = getDb();
+    const tx = await transaction(db).catch(error => console.error(error));
+
+    if (tx) {
+        const res = await query(tx, {
+            sql: `CREATE TABLE IF NOT EXISTS palettes (
+                id                   integer NOT NULL  PRIMARY KEY  ,
+                name                 varchar(100)
+             );`,
+            // sql: "DROP TABLE palettes",
+            args: []
+        })
+
+
+
+    }
+}
+
+export const initColors = async () => {
+    const db = getDb();
+    const tx = await transaction(db).catch(error => console.error(error));
+
+    if (tx) {
+        const res = await query(tx, {
+            sql: `CREATE TABLE IF NOT EXISTS color (
+                h                    double(10,20) NOT NULL    ,
+                s                    double(10,20) NOT NULL    ,
+                v                    double(10,20) NOT NULL    ,
+                paletteId            integer     ,
+                colorId                   integer NOT NULL  PRIMARY KEY autoincrement  ,
+                FOREIGN KEY ( paletteId ) REFERENCES palette( id )
+             );`,
+            // sql: "DROP TABLE color",
+            args: []
+        })
+
+    }
+}
+
+export const palettes = {
+    read: {
+        allPalettes: (): Promise<ColorPalette[]> => {
+            return new Promise(async function (resolve, reject) {
+                const db = getDb();
+                const tx = await transaction(db);
+
+                const res = await query(tx, {
+                    sql: "SELECT palettes.id, palettes.name, color.h, color.s, color.v, color.colorId FROM 'palettes' LEFT JOIN color ON palettes.id = color.paletteId ",
+                    // sql: "SELECT * FROM `color`",
+                    args: [],
+                }).catch((error) => {
+                    reject(error);
+                });
+
+                if (res) {
+
+                    let palettes: ColorPalette[] = [];
+
+                    (res.rows as any)._array.map((obj: any) => {
+                        let found = false;
+                        palettes.map((p) => {
+                            if (p.id == obj.id) {
+                                found = true
+                                p.colors.push({ h: obj.h, s: obj.s, v: obj.v, colorId: obj.colorId })
+                            }
+                        })
+                        
+                        if (!found) {
+                            palettes.push({ id: obj.id, name: obj.name, colors: (obj.colorId ? [{ h: obj.h, s: obj.s, v: obj.v, colorId: obj.colorId }] : []) })
+                        }
+                    })
+
+                    resolve(palettes)
+                }
+            })
+        },
+    },
+
+    create: {
+        palette: async (p: ColorPalette): Promise<SQLResultSet> => {
+
+            return new Promise(async function (resolve, reject) {
+                const db = getDb();
+                const tx = await transaction(db);
+
+                const res = await query(tx, {
+                    sql: "INSERT INTO `palettes` (id, name) values(?, ?)",
+                    args: [p.id, p.name],
+                }).catch((error) => {
+                    reject(error);
+                });
+
+                p.colors.map(async (c) => {
+                    const db = getDb();
+                    const temptx = await transaction(db);
+                    const res2 = await query(temptx, {
+                        sql: "INSERT INTO `color` (h, s, v, paletteId, colorId) VALUES(?, ?, ?, ?, ?)",
+                        args: [c.h, c.v, c.v, p.id, null]
+                    }).catch((error) => {
+                        reject(error);
+                    })
+                })
+
+
+                if (res) {
+                    resolve(res)
+                }
+            })
+
+        },
+    },
+
+    delete: (id: Number): Promise<SQLResultSet> => {
+        return new Promise(async function (resolve, reject) {
+            const db = getDb();
+
+            let tx = await transaction(db);
+
+            await query(tx, {
+                sql: "DELETE FROM `color` WHERE paletteId = ?",
+                args: [id]
+            }).catch((error) => {
+                reject(error);
+            })
+
+            tx = await transaction(db);
+
+            const res = await query(tx, {
+                sql: "DELETE FROM `palettes` WHERE id = ?",
+                args: [id]
+            }).catch((error) => {
+                reject(error);
+            })
+
+            if (res) {
+                resolve(res)
+            }
+        })
+    },
+    update: (p: ColorPalette): Promise<SQLResultSet> => {
+        return new Promise(async (resolve, reject) => {
+            const db = getDb()
+            let tx = await transaction(db);
+
+
+            await query(tx, {
+                sql: "UPDATE `palettes` SET name = ? WHERE id = ?",
+                args: [p.name, p.id]
+            }).catch((error) => {
+                reject(error);
+            });
+
+            tx = await transaction(db);
+
+            const res = await query(tx, {
+                sql: "DELETE FROM `color` WHERE paletteId = ?",
+                args: [p.id]
+            }).catch((error) => {
+                reject(error);
+            });
+
+            if (res) {
+
+                p.colors.map(async (c) => {
+                    const db = getDb();
+                    const temptx = await transaction(db);
+                    const res2 = await query(temptx, {
+                        sql: "INSERT INTO `color` (h, s, v, paletteId, colorId) VALUES(?, ?, ?, ?, ?)",
+                        args: [c.h, c.v, c.v, p.id, null]
+                    }).catch((error) => {
+                        reject(error);
+                    })
+                })
+            }
+
+
+            if (res) {
+                resolve(res);
+            }
+        })
+    }
+
+
+}
+
 export const lastSettings = {
     upsert: async (p: Param): Promise<SQLResultSet> => {
 
@@ -130,7 +318,7 @@ export const lastSettings = {
                     resolve(res)
                 }
             })
-        }, 
+        },
     },
 }
 
@@ -189,21 +377,21 @@ export const ledConfig = {
                     resolve(res)
                 }
             })
-        }, 
+        },
     },
 
     update: (c: LedConfig): Promise<SQLResultSet> => {
-        return new Promise(async function(resolve, reject) {
+        return new Promise(async function (resolve, reject) {
             const db = getDb(),
                 tx = await transaction(db);
-    
+
             const res = await query(tx, {
                 sql: "UPDATE `ledConfig` SET name = ? , ipAddress = ? WHERE id = ?",
                 args: [c.name, c.ipAddress, c.id],
             }).catch((error) => {
                 reject(error);
             });
- 
+
             if (res) resolve(res);
         });
     },

@@ -3,31 +3,40 @@ import React, { useEffect } from "react";
 import ConnectPage from "./ConnectPage";
 import LedControl from "./LedControl";
 import { NavigationContainer } from "@react-navigation/native";
-import { initLastSettings, initLedConfig, ledConfig } from "../utils/db";
+import { initLastSettings, initLedConfig, ledConfig, palettes } from "../utils/db";
 import { connect } from "react-redux";
 import { SQLResultSet, SQLResultSetRowList } from "expo-sqlite";
 import { LedConfig } from "../models/ledConfig";
+import { ColorPalette } from "../models/palette";
 
 const Stack = createStackNavigator();
 
 const Index = ({
   previousConnections,
   updatePreviousConnections,
+  savedThemes,
+  updateSavedThemes
 }: {
   previousConnections?: string;
   updatePreviousConnections?: any;
+  savedThemes?: ColorPalette[];
+  updateSavedThemes?: any;
 }) => {
   const getLedConfig = async () => {
     const { rows }: { rows: SQLResultSetRowList } = await ledConfig.read.all();
-    console.log("testjeeeee", (rows as any)._array);
-
     updatePreviousConnections((rows as any)._array);
   };
+
+  const getPalettes = async () => {
+    const themes: ColorPalette[] = await palettes.read.allPalettes();
+    updateSavedThemes(themes)
+  }
 
   useEffect(() => {
     initLedConfig();
     initLastSettings();
     getLedConfig();
+    getPalettes();
   }, []);
 
   
@@ -45,6 +54,7 @@ const mapStateToProps = (state: any) => {
   return {
     ipAddress: state.ipAddress,
     previousConnections: state.previousConnections,
+    savedThemes: state.savedThemes
   };
 };
 
@@ -54,6 +64,8 @@ const mapDispatchToProps = (dispatch: any) => {
       dispatch({ type: "UPDATE_IPADDRESS", payload: addr }),
     updatePreviousConnections: (config: LedConfig[]) =>
       dispatch({ type: "UPDATE_PREVIOUSCONNECTIONS", payload: config }),
+    updateSavedThemes: (themes: ColorPalette[]) =>
+      dispatch({type: "UPDATE_SAVEDTHEMES", payload: themes})
   };
 };
 

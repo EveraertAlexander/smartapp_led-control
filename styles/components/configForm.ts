@@ -41,7 +41,7 @@ export const configForm = StyleSheet.create({
         padding: 10,
         borderRadius: 4,
         color: '#FFF',
-        marginBottom: 12,
+        marginBottom: 16,
     },
 
     button: {

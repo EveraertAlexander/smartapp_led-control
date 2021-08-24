@@ -30,10 +30,6 @@ const SettingsHome = ({
     navigation.navigate("Add Connection");
   }
   
-  useEffect(() => {
-    console.log("Useeffect gecalled", previousConnections);
-    
-  }, [previousConnections])
 
   return (
     <SafeAreaView style={[background.neutral[1000], { flex: 1 }]}>

@@ -57,7 +57,7 @@ const ConnectPage = ({
   };
 
   const handlePickerChange = (e: any) => {
-    console.log(e);
+    // console.log(e);
 
     setSelected(e);
 

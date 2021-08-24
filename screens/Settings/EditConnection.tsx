@@ -31,7 +31,6 @@ const EditConnection = ({
   };
 
   const handleSaveButton = () => {
-    console.log("Save pressed");
 
     const updatedConnections: LedConfig[] = previousConnections.map(
       (c: LedConfig) => {
@@ -53,7 +52,6 @@ const EditConnection = ({
   };
 
   const handleDeleteButton = () => {
-    console.log("Delete Pressed");
 
     let updatedConnections = previousConnections.map((c: LedConfig) => {
       if (c && c.id == connection.id) {

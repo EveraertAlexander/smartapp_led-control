@@ -42,9 +42,6 @@ export const PickerForm = function ({
     );
   };
 
-  useEffect(() => {
-    console.log("items", items);
-  }, []);
 
   return (
     <View style={[app.row, style]}>

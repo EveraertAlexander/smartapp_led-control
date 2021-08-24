@@ -11,6 +11,8 @@ const initialState = {
   ipAddress: null,
   connected: false,
   previousConnections : null,
+  savedThemes: null,
+  editingTheme: null,
 };
 
 const reducer = (state: any = initialState, action: any) => {
@@ -20,9 +22,11 @@ const reducer = (state: any = initialState, action: any) => {
     case "UPDATE_CONNECTIONSTATE":
       return {...state, connected: action.payload}
     case "UPDATE_PREVIOUSCONNECTIONS":
-      console.log("YO IK WORD GEUPDATE KEREL", action.payload);
-      
       return {...state, previousConnections: action.payload}
+    case "UPDATE_SAVEDTHEMES":
+      return {...state, savedThemes: action.payload}
+    case "UPDATE_EDITINGTHEME":
+      return {...state, editingTheme: action.payload}
   }
   return state;
 };

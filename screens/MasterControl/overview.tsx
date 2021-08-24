@@ -100,7 +100,7 @@ const Overview = function ({
       });
     });
 
-    console.log("NIEUWE PARAMS MATTIE", params);
+    // console.log("NIEUWE PARAMS MATTIE", params);
   };
 
   const connectionSuccessful = (obj: any) => {
@@ -127,7 +127,6 @@ const Overview = function ({
   
 
   useEffect(() => {
-    console.log("HET IP ADRES MATJE", ipAddress);
     updateConnectionState(false);
     tryConnection();
   }, [ipAddress]);
