@@ -3,7 +3,7 @@ import { View, Text } from "react-native";
 import { app, forms } from "../styles/generic";
 import { MaterialIcons } from "@expo/vector-icons";
 import Slider from "@react-native-community/slider";
-import { theme } from "../styles/colors/theme";
+import { neutral, theme } from "../styles/colors/theme";
 import { APIError, handleData } from "../utils/dataAccess";
 import { Param } from "../models/param";
 import { lastSettings } from "../utils/db";
@@ -53,7 +53,7 @@ const SliderForm = function ({
     <View style={{marginBottom: 30}}>
       <View style={[slider.container]}>
         <Text style={forms.title}>{type.title}</Text>
-        <MaterialIcons name={iconName} size={32} color="white" />
+        <MaterialIcons name={iconName} size={30} color={neutral[200]} />
       </View>
       <Slider
         onValueChange={handleValueChange}

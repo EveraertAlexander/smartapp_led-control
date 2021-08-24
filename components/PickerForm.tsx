@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, ColorValue, processColor, StyleSheet } from "react-native";
 import { app, forms } from "../styles/generic";
 import { Picker } from "@react-native-picker/picker";
-import { background, theme } from "../styles/colors/theme";
+import { background, neutral, theme } from "../styles/colors/theme";
 import { Color } from "react-native-svg";
 import RNPickerSelect, { PickerStyle } from "react-native-picker-select";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -71,7 +71,7 @@ const PickerForm = function ({
           useNativeAndroidPickerStyle={false}
           Icon={() => {
             return (
-              <MaterialIcons name="arrow-drop-down" size={24} color="white" />
+              <MaterialIcons name="arrow-drop-down" size={24} color={neutral[200]} />
             );
           }}
         />

@@ -45,5 +45,12 @@ export const forms = StyleSheet.create({
 export const page = StyleSheet.create({
     row: {
         marginHorizontal: 16
+    },
+
+    title: {
+        fontSize: 24,
+        color: neutral[100],
+        fontFamily: 'Raleway-Medium',
+        marginBottom: 16
     }
 })

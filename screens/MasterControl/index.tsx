@@ -4,7 +4,7 @@ import { Text, View } from "react-native";
 
 import Overview from "./overview";
 import ConnectPage from "../ConnectPage";
-import { theme } from "../../styles/colors/theme";
+import { neutral, theme } from "../../styles/colors/theme";
 
 const Stack = createStackNavigator();
 
@@ -14,7 +14,7 @@ const MasterControl = function ({ navigation }: any) {
       headerMode="screen"
       screenOptions={{
         headerTintColor: "white",
-        headerStyle: { backgroundColor: theme.neutral },
+        headerStyle: { backgroundColor: neutral[700] },
       }}
     >
       {/* <Stack.Screen name = "Connect" component = {ConnectPage}/> */}

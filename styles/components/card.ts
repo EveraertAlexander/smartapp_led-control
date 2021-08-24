@@ -14,5 +14,15 @@ export const card = StyleSheet.create({
         fontFamily: 'Raleway-Medium',
         color: neutral[100],
         marginBottom: 16
+    },
+    smallTitle: {
+        fontSize: 20,
+        fontFamily: 'Raleway-Medium',
+        color: neutral[100],
+    },
+    subTitle: {
+        fontSize: 16,
+        // fontFamily: 'Raleway-Regular',
+        color: neutral[400]
     }
 })

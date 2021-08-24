@@ -11,10 +11,12 @@ import PageLayout from "../../components/PageLayout";
 import { LedConfig } from "../../models/ledConfig";
 import { ColorPalette } from "../../models/palette";
 import { settings } from "../../styles/components/settings";
-import { app } from "../../styles/generic";
+import { app, page } from "../../styles/generic";
 import { initColors, initPalettes, palettes } from "../../utils/db";
 import { MaterialIcons } from "@expo/vector-icons";
 import { theme } from "../../styles/colors/theme";
+import { card } from "../../styles/components/card";
+import FloatingButton from "../../components/FloatingButton";
 
 const ThemesOverview = ({
   savedThemes,
@@ -26,13 +28,12 @@ const ThemesOverview = ({
   updateEditingTheme: any;
 }) => {
   const handleAddPalette = async () => {
-
-    navigation.navigate("Edit Theme", {newTheme: true})
+    navigation.navigate("Edit Theme", { newTheme: true });
   };
 
   const handleOnPress = (t: ColorPalette) => {
-    updateEditingTheme(t)
-    navigation.navigate("Edit Theme", {newTheme: false})
+    updateEditingTheme(t);
+    navigation.navigate("Edit Theme", { newTheme: false });
 
     // console.log(t);
   };
@@ -42,21 +43,44 @@ const ThemesOverview = ({
     initPalettes();
   }, []);
   return (
-    <PageLayout>
-      <Text style={[settings.header, {marginBottom: 16}]}>My Themes</Text>
-      <View style={app.card}>
+    <View style={{ flex: 1 }}>
+      <PageLayout>
+        <Text style={page.title}>My Themes</Text>
         <View>
           {savedThemes
             ? savedThemes.map((t) => {
                 return (
+                  // <TouchableOpacity
+                  //   style={settings.listItemContainer}
+                  //   key={t.id}
+                  //   onPress={() => {
+                  //     handleOnPress(t);
+                  //   }}
+                  // >
+                  //   <Text style={settings.listItemText}>{t.name}</Text>
+                  //   <MaterialIcons
+                  //     name="keyboard-arrow-right"
+                  //     size={24}
+                  //     color={theme.dark}
+                  //   />
+                  // </TouchableOpacity>
+
                   <TouchableOpacity
-                    style={settings.listItemContainer}
+                    style={[
+                      card.body,
+                      {
+                        marginBottom: 16,
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        alignItems: "center"
+                      },
+                    ]}
                     key={t.id}
                     onPress={() => {
                       handleOnPress(t);
                     }}
                   >
-                    <Text style={settings.listItemText}>{t.name}</Text>
+                    <Text style={card.smallTitle}>{t.name}</Text>
                     <MaterialIcons
                       name="keyboard-arrow-right"
                       size={24}
@@ -66,12 +90,10 @@ const ThemesOverview = ({
                 );
               })
             : null}
-          <Button onButtonPress={handleAddPalette} style={{ marginTop: 16 }}>
-            Add Theme
-          </Button>
         </View>
-      </View>
-    </PageLayout>
+      </PageLayout>
+        <FloatingButton onButtonPress={handleAddPalette} />
+    </View>
   );
 };
 

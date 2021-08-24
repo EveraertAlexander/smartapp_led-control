@@ -7,11 +7,11 @@ export const button = StyleSheet.create({
         padding: 8,
         borderRadius: 8,
         alignItems: 'center',
-        justifyContent:'center',
+        justifyContent: 'center',
         // marginHorizontal: 8,
     },
 
-    redButton : {
+    redButton: {
         padding: 8,
         borderRadius: 8,
         borderColor: background.states.red,
@@ -30,5 +30,19 @@ export const button = StyleSheet.create({
         color: background.states.red,
         fontSize: 16,
         fontFamily: 'Raleway-Medium'
+    }
+})
+
+export const floatingButton = StyleSheet.create({
+    body: {
+        position: 'absolute',
+        width: 60,
+        height: 60,
+        alignItems: 'center',
+        justifyContent: 'center',
+        right: 30,
+        bottom: 30,
+        backgroundColor: theme.neutral,
+        borderRadius: 30
     }
 })

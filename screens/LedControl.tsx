@@ -62,16 +62,16 @@ function LedControl({previousConnections, updatePreviousConnections}: {previousC
             screenOptions={customTabOptions}
             tabBarOptions={{
               activeTintColor: neutral[100],
-              inactiveTintColor: neutral[700],
+              inactiveTintColor: neutral[500],
               style: {
                 ...background.neutral[900],
                 borderTopWidth: 1,
-                borderTopColor: neutral[800],
+                borderTopColor: neutral[900],
                 height: 60,
               },
               labelStyle: {
                 marginBottom: 7,
-                fontFamily: "Raleway-Regular",
+                fontFamily: "Raleway-Medium",
               },
             }}
           >

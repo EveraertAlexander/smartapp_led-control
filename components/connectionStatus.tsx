@@ -11,8 +11,8 @@ export const ConnectionStatus = function ({connected, ipAddress}: {connected: bo
     return (
         <View style={[app.row]}>
             <View>
-            <Text style={{color: neutral[200], fontSize: 20}}>Connection Status</Text>
-            <Text style={{color: neutral[600]}}>{ipAddress}</Text>
+            <Text style={{color: neutral[200], fontSize: 20, fontFamily: 'Raleway-Medium'}}>Connection Status</Text>
+            <Text style={{color: neutral[600], fontFamily: 'Raleway-Regular'}}>{ipAddress}</Text>
 
             </View>
             <Svg height='20' width='20'>

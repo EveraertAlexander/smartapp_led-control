@@ -8,12 +8,15 @@ import {
 } from "react-native";
 import { background, neutral, theme } from "../../styles/colors/theme";
 import { settings } from "../../styles/components/settings";
-import { app } from "../../styles/generic";
+import { app, page } from "../../styles/generic";
 
 import { MaterialIcons } from "@expo/vector-icons";
 import { connect } from "react-redux";
 import { LedConfig } from "../../models/ledConfig";
 import Button from "../../components/Button";
+import PageLayout from "../../components/PageLayout";
+import { card } from "../../styles/components/card";
+import FloatingButton from "../../components/FloatingButton";
 
 const SettingsHome = ({
   navigation,
@@ -28,12 +31,12 @@ const SettingsHome = ({
 
   const handleAddConnection = () => {
     navigation.navigate("Add Connection");
-  }
-  
+  };
 
   return (
-    <SafeAreaView style={[background.neutral[1000], { flex: 1 }]}>
-      <View style={app.container}>
+    <View style={{ flex: 1 }}>
+      <PageLayout>
+        {/* <View style={app.container}>
         <Text style={[settings.header, { marginBottom: 16 }]}>Connections</Text>
         <View style={app.card}>
           {previousConnections
@@ -63,10 +66,48 @@ const SettingsHome = ({
                 }
               })
             : null}
-            <Button onButtonPress={handleAddConnection} style={{marginTop: 16}}>Add Connection</Button>
+          <Button onButtonPress={handleAddConnection} style={{ marginTop: 16 }}>
+            Add Connection
+          </Button>
         </View>
-      </View>
-    </SafeAreaView>
+      </View> */}
+        <Text style={page.title}>My Connections</Text>
+        {previousConnections
+          ? previousConnections.map((c) => {
+              if (c) {
+                return (
+                  <TouchableOpacity
+                    style={[
+                      card.body,
+                      {
+                        marginBottom: 16,
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        alignItems: "center"
+                      },
+                    ]}
+                    key={c.name}
+                    onPress={() => {
+                      handleOnPress(c);
+                    }}
+                  >
+                    <View>
+                      <Text style={card.smallTitle}>{c.name}</Text>
+                      <Text style={card.subTitle}>{c.ipAddress}</Text>
+                    </View>
+                    <MaterialIcons
+                      name="keyboard-arrow-right"
+                      size={24}
+                      color={theme.dark}
+                    />
+                  </TouchableOpacity>
+                );
+              }
+            })
+          : null}
+      </PageLayout>
+      <FloatingButton onButtonPress={handleAddConnection}/>
+    </View>
   );
 };
 
