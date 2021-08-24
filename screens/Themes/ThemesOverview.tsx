@@ -26,44 +26,13 @@ const ThemesOverview = ({
   updateEditingTheme: any;
 }) => {
   const handleAddPalette = async () => {
-    // const palette: ColorPalette = {
-    //   id: 1629793619445,
-    //   name: "Naam is aangepast mattie",
-    //   colors: [
-    //     {
-    //       h: 0.680555555,
-    //       s: 0.8,
-    //       v: 0.81,
-    //     },
-    //     {
-    //       h: 1,
-    //       s: 1,
-    //       v: 1,
-    //     },
-    //     // {
-    //     //   h: 2,
-    //     //   s: 2,
-    //     //   v: 2,
-    //     // },
-    //   ],
-    // };
 
-    // // await palettes.create.palette(palette);
-    // await palettes.update(palette);
-    // // console.log(res);
-
-    // // const res = await palettes.delete(1629793084258)
-
-    // const res2 = await palettes.read.allPalettes();
-
-    // console.log(res2);
-
-    // // navigation.navigate("Edit Theme");
+    navigation.navigate("Edit Theme", {newTheme: true})
   };
 
   const handleOnPress = (t: ColorPalette) => {
-    navigation.navigate("Edit Theme")
     updateEditingTheme(t)
+    navigation.navigate("Edit Theme", {newTheme: false})
 
     // console.log(t);
   };
@@ -74,9 +43,9 @@ const ThemesOverview = ({
   }, []);
   return (
     <PageLayout>
-      <Text style={settings.header}>My Themes</Text>
+      <Text style={[settings.header, {marginBottom: 16}]}>My Themes</Text>
       <View style={app.card}>
-        <View style={{ height: 300 }}>
+        <View>
           {savedThemes
             ? savedThemes.map((t) => {
                 return (

@@ -29,7 +29,7 @@ const Index = ({
 
   const getPalettes = async () => {
     const themes: ColorPalette[] = await palettes.read.allPalettes();
-    updateSavedThemes(themes)
+    updateSavedThemes([...themes])
   }
 
   useEffect(() => {

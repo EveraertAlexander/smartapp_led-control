@@ -3,7 +3,7 @@ import { Text, View, ScrollView, Alert, RefreshControl } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ConnectionStatus } from "../../components/connectionStatus";
 import { Header } from "../../components/Header";
-import { PickerForm } from "../../components/PickerForm";
+import  PickerForm  from "../../components/PickerForm";
 import SliderForm from "../../components/SliderForm";
 import { PickerItem } from "../../models/pattern";
 import { background } from "../../styles/colors/theme";
@@ -14,13 +14,21 @@ import { params } from "../../data/params";
 import { initLedConfig, lastSettings } from "../../utils/db";
 import { connect } from "react-redux";
 import { SQLResultSet, SQLResultSetRowList } from "expo-sqlite";
+import { Color, ColorPalette } from "../../models/palette";
 
 const Overview = function ({
   navigation,
   ipAddress,
   connected,
   updateConnectionState,
-}: any) {
+  savedThemes,
+}: {
+  navigation: any;
+  ipAddress: string;
+  connected: boolean;
+  updateConnectionState: any;
+  savedThemes: ColorPalette[];
+}) {
   const [patternLabels, setPatternLabels] = useState<PickerItem[]>([]);
   const [paletteLabels, setPaletteLabels] = useState<PickerItem[]>([]);
   const [refreshing, setRefreshing] = useState<boolean>(false);
@@ -74,14 +82,54 @@ const Overview = function ({
 
   const getPatterns = () => {
     handleData(
-      `http://192.168.0.99/getpatternsources`,
+      `http://${ipAddress}/getpatternsources`,
       storePatterns,
       notConnected
     );
   };
 
   const getPalettes = () => {
-    handleData(`http://192.168.0.99/getpalettes`, storePalettes, notConnected);
+    handleData(`http://${ipAddress}/getpalettes`, storePalettes, notConnected);
+  };
+
+  const callbackSetPalettes = (obj: any) => {
+    updateConnectionState(true)
+  };
+
+  const setPalettes = () => {
+    let _palettes: PickerItem[] = [];
+
+    if (savedThemes) {
+      savedThemes.map((theme) => {
+        _palettes.push({ label: theme.name, value: theme.id });
+
+        const ColorsToSend = theme.colors.map((c: Color) => {
+          return [c.h, c.s, c.v];
+        });
+
+        if (ColorsToSend.length == 1) {
+          ColorsToSend.push(ColorsToSend[0]);
+        }
+
+        const ObjectToSend = {
+          colors: ColorsToSend,
+          mode: 0,
+          name: theme.name,
+        };
+
+        handleData(
+          `http://${ipAddress}/setpalette?key=${
+            theme.id
+          }&value=${JSON.stringify(ObjectToSend)}`,
+          callbackSetPalettes, () => {
+            updateConnectionState(false)
+          }
+        );
+      });
+    }
+
+    // console.log("Paletten", _palettes);
+    setPaletteLabels(_palettes);
   };
 
   const getLastSettings = async () => {
@@ -108,7 +156,8 @@ const Overview = function ({
     setRefreshing(false);
     getLastSettings();
     getPatterns();
-    getPalettes();
+    setPalettes();
+    // getPalettes();
   };
 
   const tryConnection = () => {
@@ -123,53 +172,60 @@ const Overview = function ({
     setRefreshing(true);
 
     tryConnection();
-  }
-  
+  };
 
   useEffect(() => {
     updateConnectionState(false);
     tryConnection();
   }, [ipAddress]);
 
+  useEffect(() => {
+    setPalettes();
+  }, [savedThemes]);
+
   return (
-      <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />} style={[background.neutral[1000], { flex: 1 }]}>
-        <View style={app.section}>
-          <Header />
-          <ConnectionStatus connected={connected} ipAddress={ipAddress} />
-        </View>
-        <View style={app.section}>
-          <PickerForm
-            type={params.primaryPattern}
-            items={patternLabels}
-            style={{ marginBottom: 30 }}
-          />
-          <SliderForm
-            style={{ marginBottom: 30 }}
-            type={params.primarySpeed}
-            iconName="speed"
-          />
-          <SliderForm type={params.primaryScale} iconName="fullscreen" />
-        </View>
-        <View style={app.section}>
-          <PickerForm
-            type={params.palette}
-            items={paletteLabels}
-            style={{ marginBottom: 30 }}
-          />
-          <SliderForm
-            style={{ marginBottom: 30 }}
-            type={params.masterBrightness}
-            iconName="brightness-6"
-          />
-          <SliderForm
-            style={{ marginBottom: 30 }}
-            type={params.masterColorTemp}
-            iconName="device-thermostat"
-          />
-          <SliderForm type={params.masterSaturation} iconName="invert-colors" />
-        </View>
-      </ScrollView>
-  
+    <ScrollView
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+      style={[background.neutral[1000], { flex: 1 }]}
+    >
+      <View style={app.section}>
+        <Header />
+        <ConnectionStatus connected={connected} ipAddress={ipAddress} />
+      </View>
+      <View style={app.section}>
+        <PickerForm
+          type={params.primaryPattern}
+          items={patternLabels}
+          style={{ marginBottom: 30 }}
+        />
+        <SliderForm
+          style={{ marginBottom: 30 }}
+          type={params.primarySpeed}
+          iconName="speed"
+        />
+        <SliderForm type={params.primaryScale} iconName="fullscreen" />
+      </View>
+      <View style={app.section}>
+        <PickerForm
+          type={params.palette}
+          items={paletteLabels}
+          style={{ marginBottom: 30 }}
+        />
+        <SliderForm
+          style={{ marginBottom: 30 }}
+          type={params.masterBrightness}
+          iconName="brightness-6"
+        />
+        <SliderForm
+          style={{ marginBottom: 30 }}
+          type={params.masterColorTemp}
+          iconName="device-thermostat"
+        />
+        <SliderForm type={params.masterSaturation} iconName="invert-colors" />
+      </View>
+    </ScrollView>
   );
 };
 
@@ -177,6 +233,7 @@ const mapStateToProps = (state: any) => {
   return {
     ipAddress: state.ipAddress,
     connected: state.connected,
+    savedThemes: state.savedThemes,
   };
 };
 

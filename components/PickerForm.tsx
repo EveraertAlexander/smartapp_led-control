@@ -10,15 +10,18 @@ import { Param } from "../models/param";
 import { APIError, handleData } from "../utils/dataAccess";
 import { pickerSelectStyles } from "../styles/components/picker";
 import { lastSettings } from "../utils/db";
+import { connect } from "react-redux";
 
-export const PickerForm = function ({
+const PickerForm = function ({
   type,
   items,
   style,
+  ipAddress
 }: {
   type: Param;
   items: any;
   style?: any;
+  ipAddress?: string
 }) {
   const placeholder = {
     label: `Select ${type.title}`,
@@ -36,7 +39,7 @@ export const PickerForm = function ({
     lastSettings.upsert(type);
 
     handleData(
-      `http://192.168.0.99/setparam?key=${type.key}&value=${val}`,
+      `http://${ipAddress}/setparam?key=${type.key}&value=${val}`,
       checkUpdate,
       APIError
     );
@@ -76,3 +79,13 @@ export const PickerForm = function ({
     </View>
   );
 };
+
+const mapStateToProps = (state: any) => {
+  return {
+    ipAddress: state.ipAddress,
+    connected: state.connected,
+    savedThemes: state.savedThemes,
+  };
+};
+
+export default connect(mapStateToProps)(PickerForm)

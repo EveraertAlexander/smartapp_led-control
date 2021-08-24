@@ -37,7 +37,7 @@ export const params: Params  = {
         maxValue: 10
     },
     palette: {
-        title: "Palette",
+        title: "Theme",
         key: "palette"
     }
 }

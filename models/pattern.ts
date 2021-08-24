@@ -1,5 +1,5 @@
 export interface PickerItem {
     label: string,
-    value: string,
+    value: number | string,
     key?: string | number
 }
