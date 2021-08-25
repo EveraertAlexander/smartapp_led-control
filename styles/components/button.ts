@@ -6,14 +6,16 @@ export const button = StyleSheet.create({
         paddingVertical: 8,
         paddingHorizontal: 16,
         borderRadius: 16,
-        backgroundColor: theme.alpha,
+        // backgroundColor: theme.alpha,
+        borderWidth: 1,
+        borderColor: theme.alpha,
         alignItems: 'center',
     },
 
     text: {
-        color: neutral[100],
+        color: theme.alpha,
         fontSize: 16,
-        fontFamily: 'Raleway-Medium'
+        fontFamily: 'Raleway-Bold'
     }
 })
 

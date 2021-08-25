@@ -17,9 +17,9 @@ const Settings = function ({ navigation }: any) {
         headerStyle: { backgroundColor: neutral[700] },
       }}
     >
-      <Stack.Screen name="Settings" component={SettingsHome} />
-      <Stack.Screen name="Edit Connection" component={EditConnection} />
-      <Stack.Screen name="Add Connection" component={AddConnection} />
+      <Stack.Screen name="Settings" component={SettingsHome} options={{ title: 'Settings' }}/>
+      <Stack.Screen name="Edit Connection" component={EditConnection}  options={{ title: 'Settings' }}/>
+      <Stack.Screen name="Add Connection" component={AddConnection} options={{ title: 'Settings' }} />
     </Stack.Navigator>
   );
 };

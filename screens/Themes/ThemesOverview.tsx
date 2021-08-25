@@ -2,13 +2,15 @@ import React, { useEffect } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { connect } from "react-redux";
 import PageLayout from "../../components/PageLayout";
-import { ColorPalette } from "../../models/palette";
+import { Color, ColorPalette } from "../../models/palette";
 import { page } from "../../styles/generic";
 import { initColors, initPalettes } from "../../utils/db";
 import { MaterialIcons } from "@expo/vector-icons";
 import { theme } from "../../styles/colors/theme";
 import { card } from "../../styles/components/card";
 import FloatingButton from "../../components/FloatingButton";
+import Svg, { Circle } from "react-native-svg";
+import { hsvToHex } from "../../utils/colorConversion";
 
 const ThemesOverview = ({
   savedThemes,
@@ -49,7 +51,7 @@ const ThemesOverview = ({
                         marginBottom: 16,
                         flexDirection: "row",
                         justifyContent: "space-between",
-                        alignItems: "center"
+                        alignItems: "center",
                       },
                     ]}
                     key={t.id}
@@ -57,7 +59,30 @@ const ThemesOverview = ({
                       handleOnPress(t);
                     }}
                   >
-                    <Text style={card.smallTitle}>{t.name}</Text>
+                    <View>
+                      <Text style={[card.smallTitle, {marginBottom: 8}]}>{t.name}</Text>
+                      <View style={{flexDirection: "row"}}>
+                        {t.colors && t.colors.length != 0
+                          ? t.colors.map((c: Color) => {
+                              return (
+                                <Svg
+                                  style={{ marginRight: 8 }}
+                                  height="20"
+                                  width="20"
+                                  key={c.colorId}
+                                >
+                                  <Circle
+                                    cx="10"
+                                    cy="10"
+                                    r="10"
+                                    fill={`${hsvToHex(c.h, c.s, c.v)}80`}
+                                  />
+                                </Svg>
+                              );
+                            })
+                          : null}
+                      </View>
+                    </View>
                     <MaterialIcons
                       name="keyboard-arrow-right"
                       size={24}
@@ -69,7 +94,7 @@ const ThemesOverview = ({
             : null}
         </View>
       </PageLayout>
-        <FloatingButton onButtonPress={handleAddPalette} />
+      <FloatingButton onButtonPress={handleAddPalette} />
     </View>
   );
 };

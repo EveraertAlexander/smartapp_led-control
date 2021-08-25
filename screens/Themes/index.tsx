@@ -17,9 +17,9 @@ const Themes = function ({ navigation }: any) {
         headerStyle: { backgroundColor: neutral[700] },
       }}
     >
-        <Stack.Screen name="Themes" component={ThemesOverview}/>
-        <Stack.Screen name="Edit Theme" component={EditTheme}/>
-        <Stack.Screen name="Add Color" component={AddColor}/>
+        <Stack.Screen name="Themes" component={ThemesOverview} options={{ title: 'Theme' }}/>
+        <Stack.Screen name="Edit Theme" component={EditTheme} options={{ title: 'Theme' }}/>
+        <Stack.Screen name="Add Color" component={AddColor} options={{ title: 'Theme' }}/>
     </Stack.Navigator>
   );
 };

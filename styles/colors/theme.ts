@@ -13,6 +13,7 @@ export const neutral = {
     1000: '#09040F',
 };
 
+
 export const theme = {
     dark: '#BB86FCCC',
     neutral: '#BB86FC',
