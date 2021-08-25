@@ -1,10 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  SafeAreaView,
-  Text,
-  View,
-  TextInput,
-} from "react-native";
+import { SafeAreaView, Text, View, TextInput, Image } from "react-native";
 import { LedConfig } from "../models/ledConfig";
 import { background, neutral } from "../styles/colors/theme";
 import RNPickerSelect, { PickerStyle } from "react-native-picker-select";
@@ -16,6 +11,7 @@ import { card } from "../styles/components/card";
 import { connectPage } from "../styles/components/connectPage";
 import { textInput } from "../styles/components/textInput";
 import Button from "../components/Button";
+import { Header } from "../components/Header";
 
 const ConnectPage = ({
   navigation,
@@ -42,9 +38,7 @@ const ConnectPage = ({
   };
 
   const handleConnectPress = async () => {
-    if (
-      validateIp(currentConfig.ipAddress)
-    ) {
+    if (validateIp(currentConfig.ipAddress)) {
       updateIpAddress(currentConfig.ipAddress);
       navigation.navigate("Main");
     } else if (!validateIp(currentConfig.ipAddress)) {
@@ -95,7 +89,7 @@ const ConnectPage = ({
   return (
     <SafeAreaView style={[background.neutral[1000], { flex: 1 }]}>
       <View style={connectPage.container}>
-        <Text style={connectPage.header}>Led Control Center</Text>
+        <Header/>
         <View style={card.body}>
           <View
             style={{
@@ -152,9 +146,9 @@ const ConnectPage = ({
             placeholder={"eg. 0.0.0.0"}
             placeholderTextColor={neutral[400]}
             value={currentConfig.ipAddress}
-            keyboardType='phone-pad'
+            keyboardType="phone-pad"
           />
-          <View style={{flexDirection: "row", justifyContent: "center"}}>
+          <View style={{ flexDirection: "row", justifyContent: "center" }}>
             <Button onButtonPress={handleConnectPress}>CONNECT</Button>
           </View>
         </View>

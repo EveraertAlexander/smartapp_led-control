@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Text, View, ScrollView, Alert, RefreshControl } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ConnectionStatus } from "../../components/connectionStatus";
-import { Header } from "../../components/Header";
+import { Header, SmallHeader } from "../../components/Header";
 import PickerForm from "../../components/PickerForm";
 import SliderForm from "../../components/SliderForm";
 import { PickerItem } from "../../models/pattern";
@@ -192,7 +192,7 @@ const Overview = function ({
         } style={[background.neutral[1000], { flex: 1 }]}
       >
         <View style={app.section}>
-          <Header />
+          <SmallHeader />
           <ConnectionStatus connected={connected} ipAddress={ipAddress} />
         </View>
         <View style={page.row}>
