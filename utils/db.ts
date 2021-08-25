@@ -175,7 +175,7 @@ export const palettes = {
                     const temptx = await transaction(db);
                     const res2 = await query(temptx, {
                         sql: "INSERT INTO `color` (h, s, v, paletteId, colorId) VALUES(?, ?, ?, ?, ?)",
-                        args: [c.h, c.v, c.v, p.id, null]
+                        args: [c.h, c.s, c.v, p.id, null]
                     }).catch((error) => {
                         reject(error);
                     })
