@@ -1,18 +1,10 @@
 import React, { useEffect } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
-import {
-  ColorPicker,
-  fromHsv,
-  TriangleColorPicker,
-} from "react-native-color-picker";
 import { connect } from "react-redux";
-import Button from "../../components/Button";
 import PageLayout from "../../components/PageLayout";
-import { LedConfig } from "../../models/ledConfig";
 import { ColorPalette } from "../../models/palette";
-import { settings } from "../../styles/components/settings";
-import { app, page } from "../../styles/generic";
-import { initColors, initPalettes, palettes } from "../../utils/db";
+import { page } from "../../styles/generic";
+import { initColors, initPalettes } from "../../utils/db";
 import { MaterialIcons } from "@expo/vector-icons";
 import { theme } from "../../styles/colors/theme";
 import { card } from "../../styles/components/card";
@@ -50,21 +42,6 @@ const ThemesOverview = ({
           {savedThemes
             ? savedThemes.map((t) => {
                 return (
-                  // <TouchableOpacity
-                  //   style={settings.listItemContainer}
-                  //   key={t.id}
-                  //   onPress={() => {
-                  //     handleOnPress(t);
-                  //   }}
-                  // >
-                  //   <Text style={settings.listItemText}>{t.name}</Text>
-                  //   <MaterialIcons
-                  //     name="keyboard-arrow-right"
-                  //     size={24}
-                  //     color={theme.dark}
-                  //   />
-                  // </TouchableOpacity>
-
                   <TouchableOpacity
                     style={[
                       card.body,

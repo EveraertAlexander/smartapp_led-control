@@ -12,14 +12,11 @@ import { slider } from "../styles/components/slider";
 
 const SliderForm = function ({
   type,
-  style,
   iconName,
   updateConnectionState,
-  connected,
   ipAddress
 }: {
   type: Param;
-  style?: any;
   iconName: any;
   updateConnectionState?: any;
   connected?: boolean,
@@ -58,7 +55,7 @@ const SliderForm = function ({
       <Slider
         onValueChange={handleValueChange}
         value={type.currentValue}
-        style={{ marginLeft: -10, marginRight: -10 }}
+        style={{ marginHorizontal: -10 }}
         minimumValue={type.minValue ? type.minValue : 0}
         maximumValue={type.maxValue ? type.maxValue : 1}
         minimumTrackTintColor={theme.delta}

@@ -2,32 +2,16 @@ import { StyleSheet } from 'react-native';
 import { background, neutral, theme } from '../colors/theme';
 
 export const button = StyleSheet.create({
-    button: {
-        backgroundColor: theme.dark,
-        padding: 8,
-        borderRadius: 8,
+    body: {
+        paddingVertical: 8,
+        paddingHorizontal: 16,
+        borderRadius: 16,
+        backgroundColor: theme.alpha,
         alignItems: 'center',
-        justifyContent: 'center',
-        // marginHorizontal: 8,
     },
 
-    redButton: {
-        padding: 8,
-        borderRadius: 8,
-        borderColor: background.states.red,
-        borderWidth: 1,
-        alignItems: 'center',
-        // marginHorizontal: 8,
-    },
-
-    buttonText: {
-        color: "#FFF",
-        fontSize: 16,
-        fontFamily: 'Raleway-Medium'
-    },
-
-    redButtonText: {
-        color: background.states.red,
+    text: {
+        color: neutral[100],
         fontSize: 16,
         fontFamily: 'Raleway-Medium'
     }

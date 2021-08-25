@@ -207,15 +207,12 @@ const Overview = function ({
             <PickerForm
               type={params.palette}
               items={paletteLabels}
-              style={{ marginBottom: 30 }}
             />
             <SliderForm
-              style={{ marginBottom: 30 }}
               type={params.masterBrightness}
               iconName="brightness-6"
             />
             <SliderForm
-              style={{ marginBottom: 30 }}
               type={params.masterColorTemp}
               iconName="device-thermostat"
             />

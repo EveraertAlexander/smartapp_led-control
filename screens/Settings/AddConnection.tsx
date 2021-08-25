@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import PageLayout from "../../components/PageLayout";
-import { settings } from "../../styles/components/settings";
-import { Text, TextInput, View } from "react-native";
-import { neutral } from "../../styles/colors/theme";
-import { configForm } from "../../styles/components/configForm";
+import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import { neutral, theme } from "../../styles/colors/theme";
 import { LedConfig } from "../../models/ledConfig";
-import Button from "../../components/Button";
 import { connect } from "react-redux";
 import { validateIp, validateName } from "../../utils/validation";
 import { ledConfig } from "../../utils/db";
+import { card } from "../../styles/components/card";
+import { textInput } from "../../styles/components/textInput";
 
 const AddConnection = ({
   route,
@@ -53,28 +52,57 @@ const AddConnection = ({
 
   return (
     <PageLayout>
-      <Text style={[settings.header, { marginBottom: 16 }]}>
-        Add a Connection
-      </Text>
-      <Text style={configForm.label}>Connection Name</Text>
-      <TextInput
-        placeholderTextColor={neutral[600]}
-        placeholder={"Eg Room 1"}
-        onChangeText={handleOnChangeName}
-        style={configForm.input}
-        value={connection.name}
-      />
-      <Text style={configForm.label}>IP Address</Text>
-      <TextInput
-        placeholderTextColor={neutral[600]}
-        placeholder={"Eg 0.0.0.0"}
-        onChangeText={handleOnChangeIpAddress}
-        style={configForm.input}
-        value={connection.ipAddress}
-      />
-      <Button onButtonPress={handleSaveButton} style={{ marginTop: 16 }}>
-        SAVE
-      </Button>
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: 16,
+        }}
+      >
+        <Text
+          style={{
+            fontSize: 24,
+            color: neutral[100],
+            fontFamily: "Raleway-Medium",
+          }}
+        >
+          Add Connection
+        </Text>
+        <TouchableOpacity onPress={handleSaveButton}>
+          <Text
+            style={{
+              fontFamily: "Raleway-Bold",
+              fontSize: 16,
+              color: theme.alpha,
+            }}
+          >
+            SAVE
+          </Text>
+        </TouchableOpacity>
+      </View>
+      <View style={card.body}>
+        <Text style={card.title}>Details</Text>
+        <Text style={textInput.label}>Name</Text>
+        <TextInput
+            placeholderTextColor={neutral[400]}
+            placeholder={"Eg Room 1"}
+            onChangeText={handleOnChangeName}
+            style={textInput.input}
+            value={connection.name}
+            selectionColor={neutral[300]}
+          />
+        <Text style={textInput.label}>IP Address</Text>
+        <TextInput
+            placeholderTextColor={neutral[400]}
+            placeholder={"Eg 0.0.0.0"}
+            onChangeText={handleOnChangeIpAddress}
+            style={textInput.input}
+            value={connection.ipAddress}
+            selectionColor={neutral[300]}
+          />
+      </View>
+
     </PageLayout>
   );
 };

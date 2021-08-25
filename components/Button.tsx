@@ -11,8 +11,8 @@ const Button = ({children, discrete, onButtonPress, style}: {children?: any, dis
         if(onButtonPress){
             onButtonPress()
         }
-    }} style={[discrete ? button.redButton : button.button, style ? style : {}]}>
-      <Text style={discrete ? button.redButtonText : button.buttonText}>{children}</Text>
+    }} style={button.body}>
+      <Text style={button.text}>{children}</Text>
     </TouchableOpacity>
   );
 };

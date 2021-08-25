@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { theme } from '../colors/theme';
+import { neutral, theme } from '../colors/theme';
 
 export const pickerSelectStyles = StyleSheet.create({
     container: {
@@ -23,9 +23,9 @@ export const pickerSelectStyles = StyleSheet.create({
       paddingHorizontal: 10,
       paddingVertical: 2,
       borderWidth: 0.5,
-      borderColor: theme.dark,
+      borderColor: theme.alpha,
       borderRadius: 8,
-      color: "white",
+      color: neutral[100],
       paddingRight: 30, // to ensure the text is never behind the icon
     },
   });

@@ -10,7 +10,7 @@ export const card = StyleSheet.create({
         marginBottom: 30,
     },
     title: {
-        fontSize: 24, 
+        fontSize: 20, 
         fontFamily: 'Raleway-Medium',
         color: neutral[100],
         marginBottom: 16

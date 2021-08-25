@@ -20,3 +20,18 @@ export const colorItem = StyleSheet.create({
         color: neutral[200]
     }
 })
+
+export const AddColorItem = StyleSheet.create({
+    container: {
+        alignItems: 'center',
+        // backgroundColor: 'white',
+    },
+
+    text: {
+        fontSize: 20,
+        fontFamily: 'Raleway-Medium',
+        color: neutral[200],
+        marginTop: 8
+        // backgroundColor: 'hotpink',
+    }
+})

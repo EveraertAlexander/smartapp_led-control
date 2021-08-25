@@ -1,19 +1,15 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
-  SafeAreaView,
-  Settings,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
-import { background, neutral, theme } from "../../styles/colors/theme";
-import { settings } from "../../styles/components/settings";
-import { app, page } from "../../styles/generic";
+import { theme } from "../../styles/colors/theme";
+import { page } from "../../styles/generic";
 
 import { MaterialIcons } from "@expo/vector-icons";
 import { connect } from "react-redux";
 import { LedConfig } from "../../models/ledConfig";
-import Button from "../../components/Button";
 import PageLayout from "../../components/PageLayout";
 import { card } from "../../styles/components/card";
 import FloatingButton from "../../components/FloatingButton";
@@ -36,41 +32,6 @@ const SettingsHome = ({
   return (
     <View style={{ flex: 1 }}>
       <PageLayout>
-        {/* <View style={app.container}>
-        <Text style={[settings.header, { marginBottom: 16 }]}>Connections</Text>
-        <View style={app.card}>
-          {previousConnections
-            ? previousConnections.map((c) => {
-                if (c) {
-                  return (
-                    <TouchableOpacity
-                      style={settings.listItemContainer}
-                      key={c.name}
-                      onPress={() => {
-                        handleOnPress(c);
-                      }}
-                    >
-                      <View>
-                        <Text style={settings.listItemText}>{c.name}</Text>
-                        <Text style={settings.listItemSubText}>
-                          {c.ipAddress}
-                        </Text>
-                      </View>
-                      <MaterialIcons
-                        name="keyboard-arrow-right"
-                        size={24}
-                        color={theme.dark}
-                      />
-                    </TouchableOpacity>
-                  );
-                }
-              })
-            : null}
-          <Button onButtonPress={handleAddConnection} style={{ marginTop: 16 }}>
-            Add Connection
-          </Button>
-        </View>
-      </View> */}
         <Text style={page.title}>My Connections</Text>
         {previousConnections
           ? previousConnections.map((c) => {

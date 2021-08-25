@@ -18,14 +18,14 @@ export const hsvToHex = (h: number, s: number, v: number): string => {
         case 5: r = v, g = p, b = q; break;
     }
 
-    r = Math.round(r*255);
-    g = Math.round(g*255);
-    b = Math.round(b*255);
+    r = Math.round(r * 255);
+    g = Math.round(g * 255);
+    b = Math.round(b * 255);
 
 
     const hexString = `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`
 
     // console.log(hexString);
-    
+
     return hexString;
 }
