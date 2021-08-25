@@ -51,7 +51,10 @@ const EditTheme = ({
       await palettes.update({ ...editingTheme });
     }
 
+    console.log("Palet dat wordt opgeslaan", editingTheme)
+
     const res = await palettes.read.allPalettes();
+    console.log("Palet dat wordt teruggegeven", res)
 
     updateSavedThemes([...res]);
 
