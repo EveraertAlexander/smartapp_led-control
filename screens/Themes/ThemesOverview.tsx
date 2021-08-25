@@ -75,7 +75,7 @@ const ThemesOverview = ({
                                     cx="10"
                                     cy="10"
                                     r="10"
-                                    fill={`${hsvToHex(c.h, c.s, c.v)}80`}
+                                    fill={`${hsvToHex(c.h, c.s, c.v)}99`}
                                   />
                                 </Svg>
                               );
