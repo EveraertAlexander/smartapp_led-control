@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Text,
   TouchableOpacity,
@@ -29,11 +29,16 @@ const SettingsHome = ({
     navigation.navigate("Add Connection");
   };
 
+  useEffect(() => {
+    console.log("Previous connections", previousConnections);
+    
+  }, [previousConnections])
+
   return (
     <View style={{ flex: 1 }}>
       <PageLayout>
         <Text style={page.title}>My Connections</Text>
-        {previousConnections
+        {previousConnections && previousConnections.length != 0
           ? previousConnections.map((c) => {
               if (c) {
                 return (
@@ -65,7 +70,7 @@ const SettingsHome = ({
                 );
               }
             })
-          : null}
+          : <Text style={page.subtitle}>Add a connection by pressing the "+" icon</Text>}
       </PageLayout>
       <FloatingButton onButtonPress={handleAddConnection}/>
     </View>

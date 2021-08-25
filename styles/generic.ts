@@ -52,5 +52,11 @@ export const page = StyleSheet.create({
         color: neutral[100],
         fontFamily: 'Raleway-Medium',
         marginBottom: 16
+    },
+
+    subtitle: {
+        fontSize: 16,
+        color: neutral[400],
+        fontFamily: 'Raleway-Medium',
     }
 })

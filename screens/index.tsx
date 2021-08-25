@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import ConnectPage from "./ConnectPage";
 import LedControl from "./LedControl";
 import { NavigationContainer } from "@react-navigation/native";
-import { initLastSettings, initLedConfig, ledConfig, palettes } from "../utils/db";
+import { ledConfig, palettes } from "../utils/db";
 import { connect } from "react-redux";
 import { SQLResultSet, SQLResultSetRowList } from "expo-sqlite";
 import { LedConfig } from "../models/ledConfig";
@@ -38,8 +38,6 @@ const Index = ({
   }
 
   useEffect(() => {
-    initLedConfig();
-    initLastSettings();
     getLedConfig();
     getPalettes();
   }, []);

@@ -5,23 +5,28 @@ import { MaterialIcons } from "@expo/vector-icons";
 import Slider from "@react-native-community/slider";
 import { neutral, theme } from "../styles/colors/theme";
 import { APIError, handleData } from "../utils/dataAccess";
-import { Param } from "../models/param";
+import { Param, Params } from "../models/param";
 import { lastSettings } from "../utils/db";
 import { connect } from "react-redux";
 import { slider } from "../styles/components/slider";
+import { params } from "../data/params";
 
 const SliderForm = function ({
   type,
   iconName,
   updateConnectionState,
-  ipAddress
+  ipAddress,
+  latestSettings
 }: {
   type: Param;
   iconName: any;
   updateConnectionState?: any;
   connected?: boolean,
-  ipAddress?: string
+  ipAddress?: string,
+  latestSettings: Params
 }) {
+
+
   const showResult = (e: any) => {
     updateConnectionState(true)
   };
@@ -44,6 +49,7 @@ const SliderForm = function ({
       }
     );
   };
+
 
 
   return (
@@ -71,6 +77,7 @@ const mapStateToProps = (state: any) => {
   return {
     ipAddress: state.ipAddress,
     connected: state.connected,
+    latestSettings: state.latestSettings
   };
 };
 

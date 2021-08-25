@@ -139,6 +139,7 @@ const EditConnection = ({
           style={textInput.input}
           value={connection.ipAddress}
           selectionColor={neutral[300]}
+          keyboardType="phone-pad"
         />
       </View>
       <DeleteButton onButtonPress={handleDeleteButton}>

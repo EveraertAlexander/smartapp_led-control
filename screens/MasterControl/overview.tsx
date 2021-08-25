@@ -11,17 +11,20 @@ import { header } from "../../styles/components/header";
 import { app, page } from "../../styles/generic";
 import { APIError, handleData } from "../../utils/dataAccess";
 import { params } from "../../data/params";
-import { initLedConfig, lastSettings } from "../../utils/db";
+import {  lastSettings } from "../../utils/db";
 import { connect } from "react-redux";
 import { SQLResultSet, SQLResultSetRowList } from "expo-sqlite";
 import { Color, ColorPalette } from "../../models/palette";
 import { card } from "../../styles/components/card";
+import { Params } from "../../models/param";
 
 const Overview = function ({
   navigation,
   ipAddress,
   connected,
   updateConnectionState,
+  updateLatestSettings,
+  latestSettings,
   savedThemes,
 }: {
   navigation: any;
@@ -29,6 +32,8 @@ const Overview = function ({
   connected: boolean;
   updateConnectionState: any;
   savedThemes: ColorPalette[];
+  latestSettings: Params;
+  updateLatestSettings: any;
 }) {
   const [patternLabels, setPatternLabels] = useState<PickerItem[]>([]);
   const [paletteLabels, setPaletteLabels] = useState<PickerItem[]>([]);
@@ -142,10 +147,13 @@ const Overview = function ({
 
     console.log(res);
 
+    const _latestSettings: Params = { ...latestSettings };
+
     res.map((r: any) => {
       Object.keys(params).map((k) => {
         if (r.id == params[k as keyof typeof params].key) {
-          params[k as keyof typeof params].currentValue = r.value;
+          _latestSettings[k as keyof typeof params].currentValue = r.value;
+          updateLatestSettings({ ..._latestSettings });
         }
       });
     });
@@ -186,43 +194,50 @@ const Overview = function ({
   }, [savedThemes]);
 
   return (
-      <ScrollView
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        } style={[background.neutral[1000], { flex: 1 }]}
-      >
-        <View style={app.section}>
-          <SmallHeader />
-          <ConnectionStatus connected={connected} ipAddress={ipAddress} />
+    <ScrollView
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+      style={[background.neutral[1000], { flex: 1 }]}
+    >
+      <View style={app.section}>
+        <SmallHeader />
+        <ConnectionStatus connected={connected} ipAddress={ipAddress} />
+      </View>
+      <View style={page.row}>
+        <View style={card.body}>
+          <Text style={card.title}>Animations</Text>
+          <PickerForm
+            type={latestSettings.primaryPattern}
+            items={patternLabels}
+          />
+          <SliderForm
+            type={latestSettings.primarySpeed}
+            iconName="speed"
+          />
+          <SliderForm
+            type={latestSettings.primaryScale}
+            iconName="fullscreen"
+          />
         </View>
-        <View style={page.row}>
-          <View style={card.body}>
-            <Text style={card.title}>Animations</Text>
-            <PickerForm type={params.primaryPattern} items={patternLabels} />
-            <SliderForm type={params.primarySpeed} iconName="speed" />
-            <SliderForm type={params.primaryScale} iconName="fullscreen" />
-          </View>
-          <View style={card.body}>
-            <Text style={card.title}>Colors</Text>
-            <PickerForm
-              type={params.palette}
-              items={paletteLabels}
-            />
-            <SliderForm
-              type={params.masterBrightness}
-              iconName="brightness-6"
-            />
-            <SliderForm
-              type={params.masterColorTemp}
-              iconName="device-thermostat"
-            />
-            <SliderForm
-              type={params.masterSaturation}
-              iconName="invert-colors"
-            />
-          </View>
+        <View style={card.body}>
+          <Text style={card.title}>Colors</Text>
+          <PickerForm type={latestSettings.palette} items={paletteLabels} />
+          <SliderForm
+            type={latestSettings.masterBrightness}
+            iconName="brightness-6"
+          />
+          <SliderForm
+            type={latestSettings.masterColorTemp}
+            iconName="device-thermostat"
+          />
+          <SliderForm
+            type={latestSettings.masterSaturation}
+            iconName="invert-colors"
+          />
         </View>
-      </ScrollView>
+      </View>
+    </ScrollView>
   );
 };
 
@@ -231,6 +246,7 @@ const mapStateToProps = (state: any) => {
     ipAddress: state.ipAddress,
     connected: state.connected,
     savedThemes: state.savedThemes,
+    latestSettings: state.latestSettings,
   };
 };
 
@@ -238,6 +254,8 @@ const mapDispatchToProps = (dispatch: any) => {
   return {
     updateConnectionState: (con: boolean) =>
       dispatch({ type: "UPDATE_CONNECTIONSTATE", payload: con }),
+    updateLatestSettings: (settings: Params) =>
+      dispatch({ type: "UPDATE_LATESTSETTINGS", payload: settings }),
   };
 };
 

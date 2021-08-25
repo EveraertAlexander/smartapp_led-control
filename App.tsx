@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
 
 import { createStore } from "redux";
@@ -6,10 +6,13 @@ import { Provider } from "react-redux";
 import LedControl from "./screens/LedControl";
 import { useFonts } from "expo-font";
 import Index from "./screens";
+import { params } from "./data/params";
+import { initColors, initLastSettings, initLedConfig, initPalettes } from "./utils/db";
 
 const initialState = {
   ipAddress: null,
   connected: false,
+  latestSettings: params,
   previousConnections : null,
   savedThemes: null,
   editingTheme: null,
@@ -27,6 +30,8 @@ const reducer = (state: any = initialState, action: any) => {
       return {...state, savedThemes: action.payload}
     case "UPDATE_EDITINGTHEME":
       return {...state, editingTheme: action.payload}
+    case "UPDATE_LATESTSETTINGS":
+      return {...state, latestSettings: action.payload}
   }
   return state;
 };
@@ -39,6 +44,13 @@ export default function App() {
     "Raleway-Medium": require("./assets/fonts/Raleway-Medium.ttf"),
     "Raleway-Bold": require("./assets/fonts/Raleway-Bold.ttf"),
   });
+
+  useEffect(() => {
+    initLedConfig();
+    initLastSettings();
+    initPalettes();
+    initColors();
+  }, [])
 
   if (fontsLoaded) {
     return (

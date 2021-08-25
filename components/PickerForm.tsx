@@ -6,7 +6,7 @@ import { background, neutral, theme } from "../styles/colors/theme";
 import { Color } from "react-native-svg";
 import RNPickerSelect, { PickerStyle } from "react-native-picker-select";
 import { MaterialIcons } from "@expo/vector-icons";
-import { Param } from "../models/param";
+import { Param, Params } from "../models/param";
 import { APIError, handleData } from "../utils/dataAccess";
 import { pickerSelectStyles } from "../styles/components/picker";
 import { lastSettings } from "../utils/db";
@@ -16,12 +16,14 @@ const PickerForm = function ({
   type,
   items,
   style,
-  ipAddress
+  ipAddress,
+  latestSettings
 }: {
   type: Param;
   items: any;
   style?: any;
-  ipAddress?: string
+  ipAddress?: string,
+  latestSettings: Params
 }) {
   const placeholder = {
     label: `Select ${type.title}`,
@@ -85,6 +87,7 @@ const mapStateToProps = (state: any) => {
     ipAddress: state.ipAddress,
     connected: state.connected,
     savedThemes: state.savedThemes,
+    latestSettings: state.latestSettings
   };
 };
 

@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import PageLayout from "../../components/PageLayout";
 import { Color, ColorPalette } from "../../models/palette";
 import { page } from "../../styles/generic";
-import { initColors, initPalettes } from "../../utils/db";
 import { MaterialIcons } from "@expo/vector-icons";
 import { theme } from "../../styles/colors/theme";
 import { card } from "../../styles/components/card";
@@ -32,16 +31,12 @@ const ThemesOverview = ({
     // console.log(t);
   };
 
-  useEffect(() => {
-    initColors();
-    initPalettes();
-  }, []);
   return (
     <View style={{ flex: 1 }}>
       <PageLayout>
         <Text style={page.title}>My Themes</Text>
         <View>
-          {savedThemes
+          {savedThemes && savedThemes.length != 0
             ? savedThemes.map((t) => {
                 return (
                   <TouchableOpacity
@@ -91,7 +86,7 @@ const ThemesOverview = ({
                   </TouchableOpacity>
                 );
               })
-            : null}
+            : <Text style={page.subtitle}>Add a theme by pressing the "+" icon</Text>}
         </View>
       </PageLayout>
       <FloatingButton onButtonPress={handleAddPalette} />
