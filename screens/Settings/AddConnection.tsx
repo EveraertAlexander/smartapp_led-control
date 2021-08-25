@@ -34,19 +34,23 @@ const AddConnection = ({
   };
 
   const handleSaveButton = async () => {
+    if (validateName(connection.name)) {
+      if (validateIp(connection.ipAddress)) {
+        const insert = await ledConfig.create(connection);
 
-    if(validateName(connection.name) && validateIp(connection.ipAddress)){
-        const insert = await ledConfig.create(connection)
+        if (insert) {
+          previousConnections.push({ ...connection, id: insert.insertId });
 
-        if(insert){
-            previousConnections.push({...connection, id: insert.insertId})
+          // const updatedConnections =
 
-            // const updatedConnections = 
-
-            
-            updatePreviousConnections([...previousConnections]);
-            navigation.pop();
+          updatePreviousConnections([...previousConnections]);
+          navigation.pop();
         }
+      } else {
+        alert("Please enter a valid IP Address");
+      }
+    } else {
+      alert("Please enter a name for your connection");
     }
   };
 
@@ -85,24 +89,23 @@ const AddConnection = ({
         <Text style={card.title}>Details</Text>
         <Text style={textInput.label}>Name</Text>
         <TextInput
-            placeholderTextColor={neutral[400]}
-            placeholder={"Eg Room 1"}
-            onChangeText={handleOnChangeName}
-            style={textInput.input}
-            value={connection.name}
-            selectionColor={neutral[300]}
-          />
+          placeholderTextColor={neutral[400]}
+          placeholder={"Eg Room 1"}
+          onChangeText={handleOnChangeName}
+          style={textInput.input}
+          value={connection.name}
+          selectionColor={neutral[300]}
+        />
         <Text style={textInput.label}>IP Address</Text>
         <TextInput
-            placeholderTextColor={neutral[400]}
-            placeholder={"Eg 0.0.0.0"}
-            onChangeText={handleOnChangeIpAddress}
-            style={textInput.input}
-            value={connection.ipAddress}
-            selectionColor={neutral[300]}
-          />
+          placeholderTextColor={neutral[400]}
+          placeholder={"Eg 0.0.0.0"}
+          onChangeText={handleOnChangeIpAddress}
+          style={textInput.input}
+          value={connection.ipAddress}
+          selectionColor={neutral[300]}
+        />
       </View>
-
     </PageLayout>
   );
 };

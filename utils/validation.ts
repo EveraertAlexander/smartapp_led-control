@@ -11,5 +11,5 @@ export const validateIp = (ipaddress: string) => {
 };
 
 export const validateName = (name: string) => {
-    return name.length > 1;
+    return name.length > 0;
 };
