@@ -1,4 +1,4 @@
-import { createStackNavigator } from "@react-navigation/stack";
+import { CardStyleInterpolators, createStackNavigator, StackNavigationOptions } from "@react-navigation/stack";
 import React, { useEffect } from "react";
 import ConnectPage from "./ConnectPage";
 import LedControl from "./LedControl";
@@ -10,6 +10,11 @@ import { LedConfig } from "../models/ledConfig";
 import { ColorPalette } from "../models/palette";
 
 const Stack = createStackNavigator();
+
+const config: StackNavigationOptions = {
+  title: "Theme",
+  cardStyleInterpolator: CardStyleInterpolators.forFadeFromBottomAndroid,
+};
 
 const Index = ({
   previousConnections,
@@ -43,8 +48,8 @@ const Index = ({
   return (
     <NavigationContainer>
       <Stack.Navigator headerMode="none">
-        <Stack.Screen name="Connect" component={ConnectPage} />
-        <Stack.Screen name="Main" component={LedControl} />
+        <Stack.Screen name="Connect" component={ConnectPage} options={config} />
+        <Stack.Screen name="Main" component={LedControl} options={config}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
