@@ -87,7 +87,6 @@ export const initPalettes = async () => {
                 id                   integer NOT NULL  PRIMARY KEY  ,
                 name                 varchar(100)
              );`,
-            // sql: "DROP TABLE palettes",
             args: []
         })
 
@@ -110,7 +109,6 @@ export const initColors = async () => {
                 colorId                   integer NOT NULL  PRIMARY KEY autoincrement  ,
                 FOREIGN KEY ( paletteId ) REFERENCES palette( id )
              );`,
-            // sql: "DROP TABLE color",
             args: []
         })
 
